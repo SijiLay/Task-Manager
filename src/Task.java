@@ -4,7 +4,7 @@ public class Task {
 
     public Task(String name){
         this.name=name;
-        completed=false;
+        this.completed=false;
     }
 
     public String getName(){
@@ -24,16 +24,11 @@ public class Task {
     }
 
     public void changeName(String newName){
-        name=newName;
+        this.name=newName;
     }
 
     @Override
     public String toString(){
-        if (completed){
-            return name+" [X]";
-        }
-        else{
-            return name+" [ ]";
-        }
+        return name + (completed ? " [X]" : " [ ]");
     }
 }

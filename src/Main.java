@@ -6,5 +6,13 @@ public class Main {
         System.out.println(manager.hasTask());
         manager.addTask("Dishes");
         System.out.println(manager.hasTask());
+        System.out.println(manager.getTaskByNumber(1));
+        manager.completeTask(1);
+        System.out.println(manager.getTaskByNumber(1));
+        manager.addTask("Clothes");
+        manager.getTaskList();
+        manager.deleteTask(1);
+        System.out.println(manager.hasTask());
+        
     }
 }

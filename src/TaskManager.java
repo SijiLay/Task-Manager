@@ -19,20 +19,21 @@ public class TaskManager {
             return false;
         }
     }
-
     public Task getTaskByNumber(int taskNumber){
         return tasks.get(taskNumber - 1);
     }
+
     public void completeTask(int taskNumber){
         getTaskByNumber(taskNumber).markCompleted();
     }
+
     public void deleteTask(int taskNumber){
         tasks.remove(getTaskByNumber(taskNumber));
     }
     public void getTaskList(){
         for(int i=0;i<tasks.size();i++){
             int number=1;
-            System.out.println(number+". "+tasks.indexOf(i));
+            System.out.println(number+". "+ tasks.get(i));
         }
     }
 
