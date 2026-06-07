@@ -10,9 +10,9 @@ public class Main {
         manager.completeTask(1);
         System.out.println(manager.getTaskByNumber(1));
         manager.addTask("Clothes");
-        manager.getTaskList();
+        manager.displayTaskList();
         manager.deleteTask(1);
         System.out.println(manager.hasTask());
-        
+
     }
 }

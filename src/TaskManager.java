@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class TaskManager {
-    ArrayList<Task> tasks;
+    private ArrayList<Task> tasks;
 
 
     public TaskManager(){
@@ -12,12 +12,7 @@ public class TaskManager {
         tasks.add(task);
     }
     public boolean hasTask(){
-        if(tasks.size()>0){
-            return true;
-        }
-        else {
-            return false;
-        }
+       return !tasks.isEmpty();
     }
     public Task getTaskByNumber(int taskNumber){
         return tasks.get(taskNumber - 1);
@@ -30,13 +25,9 @@ public class TaskManager {
     public void deleteTask(int taskNumber){
         tasks.remove(getTaskByNumber(taskNumber));
     }
-    public void getTaskList(){
+    public void displayTaskList(){
         for(int i=0;i<tasks.size();i++){
-            int number=1;
-            System.out.println(number+". "+ tasks.get(i));
+            System.out.println(i+1+". "+ tasks.get(i));
         }
     }
-
-
-
 }
