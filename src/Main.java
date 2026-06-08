@@ -11,14 +11,13 @@ public class Main {
         app.run();
     }
 
-
     public void run(){
         programRunning=true;
         while(programRunning){
             showMenu();
             while(!scanner.hasNextInt()){
                 scanner.nextLine();
-                System.out.println("Not a Valid Number ");
+                System.out.println("No letters or words allowed ");
                 System.out.println("Try again: ");
             }
             int choice=scanner.nextInt();
@@ -55,13 +54,17 @@ public class Main {
         while(!isValid){
             while(!scanner.hasNextInt()){
                 scanner.nextLine();
-                System.out.println("Not a Valid Number");
+                System.out.println("No Letters or Words allowed");
                 System.out.println("Try again: ");
             }
             taskNum=scanner.nextInt();
             scanner.nextLine();
-            if((taskNum < 1) || (taskNum > manager.sizeOfList())) {
+
+            isValidTaskNumber(taskNum);
+
+            if(!isValidTaskNumber(taskNum)) {
                 System.out.println("Task does not exist");
+                System.out.println("Try again: ");
             }
             else {
                 isValid=true;
@@ -74,21 +77,31 @@ public class Main {
         if(choice==1){
             String taskName=getTaskName();
             manager.addTask(taskName);
-            System.out.println("Success");
+            System.out.println("Task Added!!!");
         }
         else if(choice==2){
             manager.displayTaskList();
         }
         else if(choice==3){
+            if(!manager.hasTask()){
+                System.out.println("No tasks available");
+                return;
+            }
             int taskNum=getTaskNumber();
             manager.completeTask(taskNum);
-            //display message
+            System.out.println("Task Completed!");
         }
         else if(choice==4){
+            if(!manager.hasTask()){
+                System.out.println("No tasks available");
+                return;
+            }
             int taskNum=getTaskNumber();
             manager.deleteTask(taskNum);
+            System.out.println("Task Deleted!");
         }
         else if(choice ==5){
+            System.out.println("Have a nice Day!!!");
             programRunning=false;
             scanner.close();
         }
@@ -96,4 +109,10 @@ public class Main {
             System.out.println("invalid choice option");
         }
     }
+
+    private boolean isValidTaskNumber(int taskNum){
+        return taskNum >= 1 && taskNum <= manager.sizeOfList();
+    }
+
+
 }
