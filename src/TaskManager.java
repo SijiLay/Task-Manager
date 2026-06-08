@@ -30,4 +30,8 @@ public class TaskManager {
             System.out.println(i+1+". "+ tasks.get(i));
         }
     }
+
+    public int sizeOfList(){
+        return tasks.size();
+    }
 }

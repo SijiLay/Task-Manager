@@ -10,15 +10,20 @@ public class Main {
         Main app = new Main();
         app.run();
     }
+
+
     public void run(){
         programRunning=true;
         while(programRunning){
             showMenu();
+            while(!scanner.hasNextInt()){
+                scanner.nextLine();
+                System.out.println("Not a Valid Number ");
+                System.out.println("Try again: ");
+            }
             int choice=scanner.nextInt();
             scanner.nextLine();
-            System.out.println("You picked: " + choice);
             handleChoice(choice);
-
         }
     }
 
@@ -31,13 +36,38 @@ public class Main {
     }
 
     public String getTaskName(){
-        System.out.println("Enter task name: ");
-        return scanner.nextLine();
+        String taskName="";
+        while(taskName.isEmpty()){
+            System.out.println("Enter task name: ");
+            taskName=scanner.nextLine();
+            if(taskName.isEmpty()){
+                System.out.println("Cannot leave empty, Try Again");
+            }
+        }
+        return taskName;
     }
 
     public int getTaskNumber(){
+        boolean isValid=false;
         System.out.println("Enter task number: ");
-        return scanner.nextInt();
+        int taskNum = 0;
+
+        while(!isValid){
+            while(!scanner.hasNextInt()){
+                scanner.nextLine();
+                System.out.println("Not a Valid Number");
+                System.out.println("Try again: ");
+            }
+            taskNum=scanner.nextInt();
+            scanner.nextLine();
+            if((taskNum < 1) || (taskNum > manager.sizeOfList())) {
+                System.out.println("Task does not exist");
+            }
+            else {
+                isValid=true;
+            }
+       }
+        return taskNum;
     }
 
     public void handleChoice(int choice){
@@ -60,10 +90,10 @@ public class Main {
         }
         else if(choice ==5){
             programRunning=false;
+            scanner.close();
         }
         else {
             System.out.println("invalid choice option");
         }
-
     }
 }
