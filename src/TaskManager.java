@@ -8,6 +8,10 @@ public class TaskManager {
         tasks= new ArrayList<>();
     }
 
+    public TaskManager(ArrayList<Task> tasks){
+        this.tasks=tasks;
+    }
+
     public void addTask(String name){
         Task task =new Task(name);
         tasks.add(task);
@@ -40,5 +44,9 @@ public class TaskManager {
 
     public int sizeOfList(){
         return tasks.size();
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
     }
 }

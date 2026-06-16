@@ -2,15 +2,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    TaskManager manager = new TaskManager();
     Scanner scanner = new Scanner(System.in);
     private boolean programRunning = false;
+    private final TaskManager manager;
+
+
 
     public static void main(String[] args){
-        Main app = new Main();
+        FileManager fileManager = new FileManager("task.txt");
+        ArrayList<Task> loadedTasks = fileManager.loadTask();
+        TaskManager manager = new TaskManager(loadedTasks);
+        Main app =new Main(manager);
         app.run();
+        fileManager.saveTask(manager.getTasks());
     }
-
+    public Main(TaskManager manager) {
+        this.manager=manager;
+    }
+    
     public void run(){
         programRunning=true;
         while(programRunning){
