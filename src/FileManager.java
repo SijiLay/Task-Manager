@@ -8,7 +8,7 @@ public class FileManager {
         this.fileName=fileName;
     }
 
-    public void saveTask(ArrayList<Task> tasks) {
+    public void saveTasks(ArrayList<Task> tasks) {
         try {
             BufferedWriter writer = (new BufferedWriter(new FileWriter(fileName)));
             for (Task task : tasks) {
@@ -23,7 +23,7 @@ public class FileManager {
         }
     }
 
-    public ArrayList<Task> loadTask() {
+    public ArrayList<Task> loadTasks() {
         ArrayList<Task> taskList = new ArrayList<>();
         File file = new File(fileName);
         System.out.println("Loading task...");
@@ -41,6 +41,7 @@ public class FileManager {
                 boolean completionStatus = Boolean.parseBoolean(parts[1]);
                 Task task = new Task(taskName, completionStatus);
                 taskList.add(task);
+                reader.close();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -10,11 +10,11 @@ public class Main {
 
     public static void main(String[] args){
         FileManager fileManager = new FileManager("task.txt");
-        ArrayList<Task> loadedTasks = fileManager.loadTask();
+        ArrayList<Task> loadedTasks = fileManager.loadTasks();
         TaskManager manager = new TaskManager(loadedTasks);
         Main app =new Main(manager);
         app.run();
-        fileManager.saveTask(manager.getTasks());
+        fileManager.saveTasks(manager.getTasks());
     }
     public Main(TaskManager manager) {
         this.manager=manager;
@@ -76,8 +76,6 @@ public class Main {
             taskNum=scanner.nextInt();
             scanner.nextLine();
 
-            isValidTaskNumber(taskNum);
-
             if(!isValidTaskNumber(taskNum)) {
                 System.out.println("Task does not exist");
                 System.out.println("Try again: ");
@@ -124,7 +122,7 @@ public class Main {
             }
             int taskNum=getTaskNumber();
             manager.renameTask(taskNum,getTaskName());
-            System.out.println("Task has been renamed!");
+            System.out.println("Task Renamed!");
         }
         else if(choice==6){
             if(!manager.hasTask()){
