@@ -124,6 +124,7 @@ public class Main {
             }
             int taskNum=getTaskNumber();
             manager.renameTask(taskNum,getTaskName());
+            System.out.println("Task has been renamed!");
         }
         else if(choice==6){
             if(!manager.hasTask()){
