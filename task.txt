@@ -1,1 +1,1 @@
-Go gym,true
+study java,false

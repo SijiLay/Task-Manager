@@ -28,6 +28,9 @@ public class TaskManager {
     public void completeTask(int taskNumber){
         getTaskByNumber(taskNumber).markCompleted();
     }
+    public void markTaskIncomplete(int taskNumber){
+        getTaskByNumber(taskNumber).markIncomplete();
+    }
 
     public void deleteTask(int taskNumber){
         tasks.remove(getTaskByNumber(taskNumber));
@@ -37,10 +40,16 @@ public class TaskManager {
         if (tasks.isEmpty()){
             System.out.println("no task available");
         }
+        System.out.println("Current Tasks: \n");
         for(int i=0;i<tasks.size();i++){
             System.out.println(i+1+". "+ tasks.get(i));
         }
     }
+
+    public void renameTask(int taskNumber,String newName){
+        getTaskByNumber(taskNumber).changeName(newName);
+    }
+
 
     public int sizeOfList(){
         return tasks.size();

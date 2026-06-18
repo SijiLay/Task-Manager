@@ -21,6 +21,7 @@ public class Main {
     }
     
     public void run(){
+        System.out.println("====================\nTASK MANAGER\n====================\n");
         programRunning=true;
         while(programRunning){
             showMenu();
@@ -40,16 +41,22 @@ public class Main {
         System.out.println("2. View Tasks");
         System.out.println("3. Complete Task");
         System.out.println("4. Delete Task");
-        System.out.println("5. Exit program");
+        System.out.println("5. Change Name of Task");
+        System.out.println("6. Mark Task Incomplete");
+        System.out.println("7. Exit program\n");
+        System.out.println("Choose an option:");
     }
 
     public String getTaskName(){
         String taskName="";
-        while(taskName.isEmpty()){
+        while(taskName.isEmpty() || taskName.contains(",")){
             System.out.println("Enter task name: ");
             taskName=scanner.nextLine();
             if(taskName.isEmpty()){
                 System.out.println("Cannot leave empty, Try Again");
+            }
+            if(taskName.contains(", ")){
+                System.out.println("Cannot Contain Comma, Try Again");
             }
         }
         return taskName;
@@ -90,6 +97,7 @@ public class Main {
         }
         else if(choice==2){
             manager.displayTaskList();
+            System.out.println();
         }
         else if(choice==3){
             if(!manager.hasTask()){
@@ -109,7 +117,24 @@ public class Main {
             manager.deleteTask(taskNum);
             System.out.println("Task Deleted!");
         }
-        else if(choice ==5){
+        else if (choice==5){
+            if(!manager.hasTask()){
+                System.out.println("No tasks available");
+                return;
+            }
+            int taskNum=getTaskNumber();
+            manager.renameTask(taskNum,getTaskName());
+        }
+        else if(choice==6){
+            if(!manager.hasTask()){
+                System.out.println("No tasks available");
+                return;
+            }
+            int taskNum=getTaskNumber();
+            manager.markTaskIncomplete(taskNum);
+            System.out.println("Task Marked Incomplete!");
+        }
+        else if(choice ==7){
             System.out.println("Have a nice Day!!!");
             programRunning=false;
             scanner.close();
