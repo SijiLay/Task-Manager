@@ -1,1 +1,1 @@
-walk the dog,false
+walk the dog,false,Medium,Other

@@ -39,14 +39,22 @@ public class FileManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
+                String priority = "";
+                String category="";
+                if(parts.length==2){
+                    priority="Medium";
+                    category="Other";
+                }
+                else if(parts.length==4){
+                    priority =parts[2];
+                    category=parts[3];
+                }
                 String taskName = parts[0];
                 boolean completionStatus = Boolean.parseBoolean(parts[1]);
-                String priority =parts[2];
-                String category=parts[3];
                 Task task = new Task(taskName, completionStatus,priority,category);
                 taskList.add(task);
-                reader.close();
             }
+            reader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
