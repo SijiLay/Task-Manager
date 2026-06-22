@@ -57,7 +57,7 @@ public class Main {
             if(taskName.isEmpty()){
                 System.out.println("Cannot leave empty, Try Again");
             }
-            if(taskName.contains(", ")){
+            if(taskName.contains(",")){
                 System.out.println("Cannot Contain Comma, Try Again");
             }
         }
@@ -162,13 +162,6 @@ public class Main {
             programRunning=false;
             scanner.close();
         }
-        else if(choice == 99){
-            int priorityChoice = getPriorityChoice();
-            String priority = getPriorityFromChoice(priorityChoice);
-
-            System.out.println("Choice: " + priorityChoice);
-            System.out.println("Priority: " + priority);
-        }
         else {
             System.out.println("invalid choice option");
         }
@@ -235,6 +228,8 @@ public class Main {
             return "Fitness";
         } else if (choice == 5) {
             return "Church";
+        } else if (choice==6) {
+            return "Other";
         } else{
             return null;
         }
@@ -260,7 +255,7 @@ public class Main {
             scanner.nextLine();
 
             if(categoryNum<1 ||categoryNum>6) {
-                System.out.println("Not an available priority");
+                System.out.println("Not an available category");
                 System.out.println("Try again: ");
             }
             else {
