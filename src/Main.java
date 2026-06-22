@@ -43,7 +43,9 @@ public class Main {
         System.out.println("4. Delete Task");
         System.out.println("5. Change Name of Task");
         System.out.println("6. Mark Task Incomplete");
-        System.out.println("7. Exit program\n");
+        System.out.println("7. Set Task Priority");
+        System.out.println("8. Set Task Category");
+        System.out.println("9. Exit program\n");
         System.out.println("Choose an option:");
     }
 
@@ -133,10 +135,39 @@ public class Main {
             manager.markTaskIncomplete(taskNum);
             System.out.println("Task Marked Incomplete!");
         }
-        else if(choice ==7){
+        else if(choice==7){
+            if(!manager.hasTask()){
+                System.out.println("No tasks available");
+                return;
+            }
+            int taskNum=getTaskNumber();
+            int priorityNum=getPriorityChoice();
+            String priority = getPriorityFromChoice(priorityNum);
+            manager.setTaskPriority(taskNum,priority);
+            System.out.println("Priority Updated!");
+        }
+        else if(choice==8){
+            if(!manager.hasTask()){
+                System.out.println("No tasks available");
+                return;
+            }
+            int taskNum=getTaskNumber();
+            int categoryNum=getCategoryChoice();
+            String category = getCategoryFromChoice(categoryNum);
+            manager.setTaskCategory(taskNum,category);
+            System.out.println("Category Updated!");
+        }
+        else if(choice ==9){
             System.out.println("Have a nice Day!!!");
             programRunning=false;
             scanner.close();
+        }
+        else if(choice == 99){
+            int priorityChoice = getPriorityChoice();
+            String priority = getPriorityFromChoice(priorityChoice);
+
+            System.out.println("Choice: " + priorityChoice);
+            System.out.println("Priority: " + priority);
         }
         else {
             System.out.println("invalid choice option");
@@ -147,5 +178,96 @@ public class Main {
         return taskNum >= 1 && taskNum <= manager.sizeOfList();
     }
 
+    private String getPriorityFromChoice(int choice){
+        if(choice==1){
+            return "High";
+        }
+        else if(choice==2){
+            return "Medium";
+        }
+        else if(choice==3){
+            return "Low";
+        }
+        else{
+            return null;
+        }
+    }
+
+    private int getPriorityChoice(){
+        boolean isValid=false;
+        System.out.println("1. High\n" +
+                "2. Medium\n" +
+                "3. Low\n" +
+                "\n" +
+                "Enter priority:");
+        int  priorityNum = 0;
+
+        while(!isValid){
+            while(!scanner.hasNextInt()){
+                scanner.nextLine();
+                System.out.println("No Letters or Words allowed");
+                System.out.println("Try again: ");
+            }
+            priorityNum=scanner.nextInt();
+            scanner.nextLine();
+
+            if(priorityNum<1 ||priorityNum>3) {
+                System.out.println("Not an available priority");
+                System.out.println("Try again: ");
+            }
+            else {
+                isValid=true;
+            }
+        }
+        return priorityNum;
+    }
+
+    private String getCategoryFromChoice(int choice){
+        if(choice==1){
+            return "School";
+        }
+        else if(choice==2){
+            return "Work";
+        }
+        else if(choice==3){
+            return "Personal";
+        } else if (choice==4) {
+            return "Fitness";
+        } else if (choice == 5) {
+            return "Church";
+        } else{
+            return null;
+        }
+    }
+
+    private int getCategoryChoice(){
+        boolean isValid=false;
+        System.out.println("1. School\n" +
+                "2. Work\n" +
+                "3. Personal\n" +
+                "4. Fitness\n" +
+                "5. Church\n" +
+                "6. Other");
+        int  categoryNum = 0;
+
+        while(!isValid){
+            while(!scanner.hasNextInt()){
+                scanner.nextLine();
+                System.out.println("No Letters or Words allowed");
+                System.out.println("Try again: ");
+            }
+            categoryNum=scanner.nextInt();
+            scanner.nextLine();
+
+            if(categoryNum<1 ||categoryNum>6) {
+                System.out.println("Not an available priority");
+                System.out.println("Try again: ");
+            }
+            else {
+                isValid=true;
+            }
+        }
+        return categoryNum;
+    }
 
 }

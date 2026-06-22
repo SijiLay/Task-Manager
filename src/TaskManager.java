@@ -40,7 +40,8 @@ public class TaskManager {
         if (tasks.isEmpty()){
             System.out.println("no task available");
         }
-        System.out.println("Current Tasks: \n");
+        else{
+        System.out.println("Current Tasks: \n");}
         for(int i=0;i<tasks.size();i++){
             System.out.println(i+1+". "+ tasks.get(i));
         }
@@ -57,5 +58,13 @@ public class TaskManager {
 
     public ArrayList<Task> getTasks() {
         return tasks;
+    }
+
+    public void setTaskPriority(int taskNumber, String priority){
+        getTaskByNumber(taskNumber).setPriority(priority);
+    }
+
+    public void setTaskCategory(int taskNumber, String category){
+        getTaskByNumber(taskNumber).setCategory(category);
     }
 }

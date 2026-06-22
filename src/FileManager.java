@@ -14,7 +14,9 @@ public class FileManager {
             for (Task task : tasks) {
                 String name = task.getName();
                 boolean status = task.isCompleted();
-                writer.write(name + "," + status);
+                String priority=task.getPriority();
+                String category = task.getCategory();
+                writer.write(name + "," + status+","+priority+","+category);
                 writer.newLine();
             }
             writer.close();
@@ -39,7 +41,9 @@ public class FileManager {
                 String[] parts = line.split(",");
                 String taskName = parts[0];
                 boolean completionStatus = Boolean.parseBoolean(parts[1]);
-                Task task = new Task(taskName, completionStatus);
+                String priority =parts[2];
+                String category=parts[3];
+                Task task = new Task(taskName, completionStatus,priority,category);
                 taskList.add(task);
                 reader.close();
             }
