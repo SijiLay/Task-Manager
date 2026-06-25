@@ -1,1 +1,5 @@
-walk the dog,false,Medium,Other
+Study Java,false,High,Other
+Go Gym,false,Medium,Fitness
+Study Python,true,Low,School
+Bible Notes,false,Low,Work
+Work shift,true,High,Church
