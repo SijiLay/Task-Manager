@@ -3,11 +3,9 @@ import java.util.ArrayList;
 
 public class FileManager {
     private String fileName;
-
     public FileManager(String fileName){
         this.fileName=fileName;
     }
-
     public void saveTasks(ArrayList<Task> tasks) {
         try {
             BufferedWriter writer = (new BufferedWriter(new FileWriter(fileName)));
@@ -24,7 +22,6 @@ public class FileManager {
             throw new RuntimeException(e);
         }
     }
-
     public ArrayList<Task> loadTasks() {
         ArrayList<Task> taskList = new ArrayList<>();
         File file = new File(fileName);

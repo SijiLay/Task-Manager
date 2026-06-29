@@ -37,17 +37,6 @@ public class TaskManager {
         tasks.remove(getTaskByNumber(taskNumber));
     }
 
-    public void displayTaskList(){
-        if (tasks.isEmpty()){
-            System.out.println("no task available");
-        }
-        else{
-        System.out.println("Current Tasks: \n");}
-        for(int i=0;i<tasks.size();i++){
-            System.out.println(i+1+". "+ tasks.get(i));
-        }
-    }
-
     public void renameTask(int taskNumber,String newName){
         getTaskByNumber(taskNumber).changeName(newName);
     }
