@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-
+// Laptop sync test
 public class Main {
     private Scanner scanner = new Scanner(System.in);
     private boolean programRunning = false;
