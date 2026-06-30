@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Main {
     private Scanner scanner = new Scanner(System.in);
     private boolean programRunning = false;
@@ -39,8 +40,7 @@ public class Main {
         7. Delete Task        8. Change Task Name
         9. Mark Incomplete   10. Set Priority
         11. Set Category     12. Exit Program
-        ============================
-        Choose an option:""");    }
+        ============================""");    }
 
     public void handleChoice(int choice) {
         switch (choice) {
@@ -385,13 +385,13 @@ public class Main {
     public void displayError(String message){
         System.out.println(message);
     }
+
     public void displayHeader(String title){
         System.out.println(title);
     }
 
-
     private int getMainMenuChoice(){
-        return getValidatedInt("Enter Main Menu Option","Number is not in range.", 1,12,false);
+        return getValidatedInt("Enter Main Menu Option: ","Number is not in range.", 1,12,false);
     }
 
     public int getValidatedInt(String prompt, String errorMessage, int min, int max, boolean allowZero){
@@ -420,6 +420,5 @@ public class Main {
         }
         return num;
     }
-
 
 }
