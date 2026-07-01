@@ -58,7 +58,7 @@ public class TaskManager {
         getTaskByNumber(taskNumber).setCategory(category);
     }
 
-    public ArrayList<Task> searchTask(String searchTerm){
+    public ArrayList<Task> searchTasks(String searchTerm){
         ArrayList<Task> searchList = new ArrayList<>();
 
         for(Task task:tasks){

@@ -1,6 +1,6 @@
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
-// Laptop sync test
 public class Main {
     private Scanner scanner = new Scanner(System.in);
     private boolean programRunning = false;
@@ -20,7 +20,7 @@ public class Main {
     }
 
     public void run() {
-        displayHeader("=============================================================\n   Welcome to TASK MANAGER Project by Olmayowa Siji Layeni \n=============================================================\n");
+        System.out.println("=============================================================\n   Welcome to TASK MANAGER Project by Olmayowa Siji Layeni \n=============================================================\n");
         programRunning = true;
         while (programRunning) {
             showMainMenu();
@@ -34,7 +34,7 @@ public class Main {
         ============================
                  TASK MENU          
         ============================
-        1. Add Task          2. View Tasks
+        1. Add Task           2. View Tasks
         3. Search Task        4. Filter Task
         5. Sort Task          6. Complete Task
         7. Delete Task        8. Change Task Name
@@ -81,7 +81,7 @@ public class Main {
                 handleExit();
                 break;
             default:
-                System.out.println("invalid choice option");
+                System.out.println("Invalid choice option.");
                 break;
         }
     }
@@ -101,12 +101,23 @@ public class Main {
         return taskName;
     }
 
-    public int getTaskNumber() {
-        return getValidatedInt("Enter a Task Number:","Invalid task number!",1,manager.sizeOfList(),false);
+    public String getSearchTerm() {
+        String searchTerm = "";
+        while (searchTerm.isEmpty()) {
+            System.out.println("Enter task name: ");
+            searchTerm = scanner.nextLine();
+            if (searchTerm.isEmpty()) {
+                displayError("Cannot leave empty, Try Again");
+            }
+            if (searchTerm.equals("0")){
+                return "0";
+            }
+        }
+        return searchTerm;
     }
 
-    private boolean isValidTaskNumber(int taskNum) {
-        return taskNum >= 1 && taskNum <= manager.sizeOfList();
+    public int getTaskNumber() {
+        return getValidatedInt("Enter a Task Number:","Invalid task number!",1,manager.sizeOfList(),true);
     }
 
     private String getPriorityFromChoice(int choice) {
@@ -122,8 +133,8 @@ public class Main {
     }
 
     private int getPriorityChoice() {
-
-        return getValidatedInt("Enter Priority Choice:","Invalid Priority Choice!",1,3,true);
+        showPriorityMenu();
+        return getValidatedInt("Enter Priority Choice:","Invalid Priority Choice.",1,3,true);
     }
 
     private String getCategoryFromChoice(int choice) {
@@ -146,15 +157,8 @@ public class Main {
 
 
     private int getCategoryChoice() {
-        System.out.println("""
-        1. School
-        2. Work
-        3. Personal
-        4. Fitness
-        5. Church
-        6. Other
-        """);
-        return getValidatedInt("Enter Category Choice:","Invalid Category Choice!",1,6,true);
+        showCategoryMenu();
+        return getValidatedInt("Enter Category Choice:","Invalid Category Choice.",1,6,true);
     }
 
     public void showFilterMenu() {
@@ -162,41 +166,37 @@ public class Main {
         1. Filter by Priority
         2. Filter by Category
         3. Filter by Completion Status
-        
-        Choose an option:""");
+        0. Return""");
     }
+
     public void showPriorityMenu(){
         System.out.println("""
         1. High
         2. Medium
         3. Low
+        0. Return
         """);
     }
 
+    public void showCategoryMenu(){
+        System.out.println("""
+        1. School
+        2. Work
+        3. Personal
+        4. Fitness
+        5. Church
+        6. Other
+        0. Return""");
+    }
+
     public int getCompletionChoice() {
-        boolean isValid = false;
+
         System.out.println("""
         1. Completed
-        2. Incomplete""");
-        int completionNum = 0;
+        2. Incomplete
+        0. Return""");
 
-        while (!isValid) {
-            while (!scanner.hasNextInt()) {
-                scanner.nextLine();
-                displayError("No Letters or Words allowed");
-                System.out.println("Try again: ");
-            }
-            completionNum = scanner.nextInt();
-            scanner.nextLine();
-
-            if (completionNum < 1 || completionNum > 2) {
-                displayError("Not an available option");
-                System.out.println("Try again: ");
-            } else {
-                isValid = true;
-            }
-        }
-        return completionNum;
+        return getValidatedInt("Enter Completion Choice","Invalid Completion Choice",1,2,true);
     }
 
     private boolean getCompletionFromChoice(int choice) {
@@ -209,170 +209,199 @@ public class Main {
 
     private int getFilterChoice() {
         showFilterMenu();
-        return getValidatedInt("Enter Filter Choice","Invalid Filter Choice!",1,3,true);
+        return getValidatedInt("Enter Filter Choice:","Invalid Filter Choice.",1,3,true);
     }
 
     public void showSortMenu() {
-        System.out.println("1. Sort by Priority\n" +
-                "2. Sort by Completion Status\n");
+        System.out.println("""
+            1. Sort by Priority
+            2. Sort by Completion Status
+            0. Return""");
     }
 
     public int getSortChoice() {
         showSortMenu();
-        return getValidatedInt("Enter Sort Choice","Invaild Sort Choice",1,2,true);
+        return getValidatedInt("Enter Sort Choice","Invalid Sort Choice",1,2,true);
     }
 
     public void handleAddTask() {
         String taskName = getTaskName();
         manager.addTask(taskName);
-        System.out.println("Task Added!!!");
+        System.out.println("Task Added.");
     }
 
     public void handleViewTask() {
+        displayHeader("Current Tasks");
         displayTasks(manager.getTasks());
         System.out.println();
     }
 
     public void handleSearchTasks() {
-        if (!manager.hasTask()) {
-            System.out.println("No tasks available");
+        if (!ensureTasksExist()) {
             return;
         }
-        String searchTerm = getTaskName();
-        ArrayList<Task> results = manager.searchTask(searchTerm);
-        for (Task task : results) {
-            System.out.println(task);
+        String searchTerm = getSearchTerm();
+        if(searchTerm.equals("0")){
+            return;
         }
+        ArrayList<Task> results = manager.searchTasks(searchTerm);
+        displayHeader("Search Results");
+        displayTasks(results);
+
     }
 
     public void handleFilterTasks(){
+        if (!ensureTasksExist()) {
+            return;
+        }
         int filterChoice = getFilterChoice();
-        if (filterChoice == 1) {
+        if(filterChoice==0){
+            return;
+        }
+        else if (filterChoice == 1) {
             int priorityChoice = getPriorityChoice();
             String priority = getPriorityFromChoice(priorityChoice);
             ArrayList<Task> results = manager.filterByPriority(priority);
 
+            displayHeader("Filtered Tasks");
+            displayTasks(results);
 
-            for (Task task : results) {
-                System.out.println(task);
-            }
-        } else if (filterChoice == 2) {
+        }
+        else if (filterChoice == 2) {
             int categoryChoice = getCategoryChoice();
             String category = getCategoryFromChoice(categoryChoice);
             ArrayList<Task> results = manager.filterByCategory(category);
-            for (Task task : results) {
-                System.out.println(task);
-            }
-        } else if (filterChoice == 3) {
+            displayHeader("Filtered Tasks");
+            displayTasks(results);
+
+        }
+        else if (filterChoice == 3) {
             int completionChoice = getCompletionChoice();
             boolean completion = getCompletionFromChoice(completionChoice);
             ArrayList<Task> results = manager.filterByCompletionStatus(completion);
 
+            displayHeader("Filtered Tasks");
+            displayTasks(results);
 
-            for (Task task : results) {
-                System.out.println(task);
-            }
-        } else {
-            System.out.println("invalid choice option");
         }
-
     }
 
     public void handleSortTasks(){
-        if (!manager.hasTask()) {
-        System.out.println("No tasks available");
-        return;
-    }
+        if (!ensureTasksExist()) {
+            return;
+        }
         int sortChoice = getSortChoice();
-        if (sortChoice == 1) {
+        if(sortChoice==0){
+            return;
+        }
+        else if (sortChoice == 1) {
             ArrayList<Task> results = manager.sortByPriority();
-            for (Task task : results) {
-                System.out.println(task);
-            }
+            displayHeader("Sorted Tasks");
+
+            displayTasks(results);
         } else if (sortChoice == 2) {
             ArrayList<Task> results = manager.sortByCompletionStatus();
-            for (Task task : results) {
-                System.out.println(task);
-            }
+            displayHeader("Sorted Tasks");
+
+            displayTasks(results);
+
         }
     }
 
     public void handleCompleteTask(){
-        if (!manager.hasTask()) {
-        displayError("No tasks available");
-        return;
-    }
+        if (!ensureTasksExist()) {
+            return;
+        }
         int taskNum = getTaskNumber();
+        if(taskNum==0){
+            return;
+        }
         manager.completeTask(taskNum);
         System.out.println("Task Completed!");
     }
 
     public void handleDeleteTask(){
-        if (!manager.hasTask()) {
-            displayError("No tasks available");
+        if (!ensureTasksExist()) {
             return;
         }
         int taskNum = getTaskNumber();
+        if(taskNum==0){
+            return;
+        }
         manager.deleteTask(taskNum);
-        displaySuccess("Task Deleted!");
+        displaySuccess("Task Deleted.");
 
     }
 
     public void handleRenameTask(){
-        if (!manager.hasTask()) {
-            displayError("No tasks available");
+        if (!ensureTasksExist()) {
             return;
         }
         int taskNum = getTaskNumber();
+        if(taskNum==0){
+            return;
+        }
         manager.renameTask(taskNum, getTaskName());
-        displaySuccess("Task Renamed!");
+        displaySuccess("Task Renamed.");
     }
 
     public void handleMarkIncomplete(){
-        if (!manager.hasTask()) {
-            displayError("No tasks available");
+        if (!ensureTasksExist()) {
             return;
         }
         int taskNum = getTaskNumber();
+        if(taskNum==0){
+            return;
+        }
         manager.markTaskIncomplete(taskNum);
-        displaySuccess("Task Marked Incomplete!");
+        displaySuccess("Task Marked Incomplete.");
 
     }
 
     public void handleSetPriority(){
-        if (!manager.hasTask()) {
-            displayError("No tasks available");
+        if (!ensureTasksExist()) {
             return;
         }
         int taskNum = getTaskNumber();
+        if(taskNum==0){
+            return;
+        }
         int priorityNum = getPriorityChoice();
+        if(priorityNum==0){
+            return;
+        }
         String priority = getPriorityFromChoice(priorityNum);
         manager.setTaskPriority(taskNum, priority);
-        displaySuccess("Priority Updated!");
+        displaySuccess("Priority Updated.");
 
     }
 
     public void handleSetCategory(){
-        if (!manager.hasTask()) {
-            displayError("No tasks available");
+        if (!ensureTasksExist()) {
             return;
         }
         int taskNum = getTaskNumber();
+        if(taskNum==0){
+            return;
+        }
         int categoryNum = getCategoryChoice();
+        if(categoryNum==0){
+            return;
+        }
         String category = getCategoryFromChoice(categoryNum);
         manager.setTaskCategory(taskNum, category);
-        displaySuccess("Category Updated!");
+        displaySuccess("Category Updated.");
     }
 
     public void handleExit(){
-        System.out.println("Have a nice Day!!!");
+        System.out.println("Have a nice Day.");
         programRunning=false;
         scanner.close();
     }
 
     public void displayTasks(ArrayList<Task> tasks) {
         if (tasks.isEmpty()) {
-            displayError("no task available");
+            displayError("no task available.");
         } else {
             for(int i=0;i<tasks.size();i++){
                 System.out.println(i+1+". "+ tasks.get(i));
@@ -386,8 +415,8 @@ public class Main {
         System.out.println(message);
     }
 
-    public void displayHeader(String title){
-        System.out.println(title);
+    public void displayHeader(String title) {
+        System.out.printf("%n%s%n------------------------------%n", title);
     }
 
     private int getMainMenuChoice(){
@@ -421,4 +450,11 @@ public class Main {
         return num;
     }
 
+    private boolean ensureTasksExist(){
+        if(!manager.hasTask()){
+            displayError("No tasks available");
+            return false;
+        }
+        return true;
+    }
 }
