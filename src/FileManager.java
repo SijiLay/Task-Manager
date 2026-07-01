@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class FileManager {
-    private String fileName;
+    private final String fileName;
     public FileManager(String fileName){
         this.fileName=fileName;
     }
@@ -58,3 +58,4 @@ public class FileManager {
         return taskList;
     }
 }
+
