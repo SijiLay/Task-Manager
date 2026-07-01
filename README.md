@@ -158,6 +158,19 @@ Through this project, I practiced:
 * Building a project across multiple versions
 * Writing documentation for a portfolio project
 
+## Skills Practiced
+
+- Java programming
+- Object-oriented programming
+- Console-based user interaction
+- Input validation
+- ArrayLists
+- File reading and writing
+- Searching, filtering, and sorting data
+- Refactoring repeated code into helper methods
+- Project documentation
+- Git and GitHub workflow 
+
 ## Future Improvements
 
 Possible future improvements include:
