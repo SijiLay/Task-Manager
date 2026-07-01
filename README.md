@@ -51,7 +51,38 @@ Handles saving and loading tasks from a text file so that task data can persist 
 3. Open the project in an IDE such as IntelliJ IDEA, Eclipse, or VS Code.
 4. Run `Main.java`.
 5. Use the console menu to manage your tasks.
+## Demo
 
+When the program starts, the user is shown the main task menu:
+
+```text
+=========================================
+              TASK MANAGER
+=========================================
+Created by Olamayowa Siji Layeni
+
+A simple console task manager.
+=========================================
+
+============================
+         TASK MENU
+============================
+1. Add Task           2. View Tasks
+3. Search Task        4. Filter Task
+5. Sort Task          6. Complete Task
+7. Delete Task        8. Change Task Name
+9. Mark Incomplete   10. Set Priority
+11. Set Category     12. Exit Program
+============================
+```
+
+Example task display:
+
+```text
+1. Finish README [ ] (High) [School]
+2. Review Java code [ ] (Medium) [Personal]
+3. Push project to GitHub [X] (Low) [Other]
+```
 ## Example Menu
 
 ```text
