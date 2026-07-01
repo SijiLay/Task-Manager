@@ -1,5 +1,3 @@
-Study Java,false,High,Other
-Go Gym,false,Medium,Fitness
-Study Python,true,Low,School
-Bible Notes,false,Low,Work
-Work shift,true,High,Church
+Finish README,false,High,School
+Review Java code,false,Medium,Personal
+Push project to GitHub,true,Low,Other
