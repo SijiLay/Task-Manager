@@ -94,7 +94,20 @@ TASK MENU
 9. Mark Incomplete   10. Set Priority
 11. Set Category     12. Exit Program
 ```
+## Repository Structure
 
+```text
+TaskManager/
+├── src/
+│   ├── Main.java
+│   ├── Task.java
+│   ├── TaskManager.java
+│   └── FileManager.java
+├── docs/
+│   └── VERSION_HISTORY.md
+├── README.md
+├── .gitignore
+└── task.txt
 ## Version History
 
 ### V1: Basic Console Task Manager
