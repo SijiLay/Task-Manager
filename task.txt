@@ -1,3 +1,5 @@
-Finish README,false,High,School
-Review Java code,false,Medium,Personal
-Push project to GitHub,true,Low,Other
+Homework,false,HIGH,SCHOOL
+Shift,true,MEDIUM,WORK
+Gym,false,LOW,FITNESS
+Bible Study,true,HIGH,CHURCH
+Laundry,false,MEDIUM,OTHER

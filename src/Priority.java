@@ -1,3 +1,21 @@
 public enum Priority {
-    LOW, MEDIUM, HIGH
+    LOW(3), MEDIUM(2), HIGH(1);
+
+    private final int rank;
+    Priority(int rank) {
+        this.rank=rank;
+    }
+
+    public static Priority fromString(String priority){
+        return switch (priority) {
+            case "HIGH" -> HIGH;
+            case "MEDIUM" -> MEDIUM;
+            case "LOW" -> LOW;
+            default -> MEDIUM;
+        };
+    }
+
+    public int getRank() {
+        return rank;
+    }
 }

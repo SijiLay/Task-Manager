@@ -13,7 +13,7 @@ public class FileManager {
                 String name = task.getName();
                 boolean status = task.isCompleted();
                 Priority priority=task.getPriority();
-                String category = task.getCategory();
+                Category category = task.getCategory();
                 writer.write(name + "," + status+","+priority+","+category);
                 writer.newLine();
             }
@@ -36,19 +36,13 @@ public class FileManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                Priority priority;
-                String category="";
-                if(parts.length==2){
-                    priority=Priority.MEDIUM;
-                    category="Other";
-                }
-                else if(parts.length==4){
-                    priority = parts[2];
-                    category=parts[3];
-                }
+                Priority priority = Priority.fromString(parts[2]);
+                Category category = Category.fromString(parts[3]);
+
                 String taskName = parts[0];
                 boolean completionStatus = Boolean.parseBoolean(parts[1]);
-                Task task = new Task(taskName, completionStatus,priority,category);
+
+                Task task = new Task(taskName, completionStatus, priority, category);
                 taskList.add(task);
             }
             reader.close();

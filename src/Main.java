@@ -137,7 +137,7 @@ public class Main {
             return;
         } else if (filterChoice == 1) {
             int priorityChoice = getPriorityChoice();
-            String priority = getPriorityFromChoice(priorityChoice);
+            Priority priority = getPriorityFromChoice(priorityChoice);
             ArrayList<Task> results = manager.filterByPriority(priority);
 
             displayHeader("Filtered Tasks");
@@ -145,7 +145,7 @@ public class Main {
 
         } else if (filterChoice == 2) {
             int categoryChoice = getCategoryChoice();
-            String category = getCategoryFromChoice(categoryChoice);
+            Category category = getCategoryFromChoice(categoryChoice);
             ArrayList<Task> results = manager.filterByCategory(category);
             displayHeader("Filtered Tasks");
             displayTasks(results);
@@ -238,7 +238,7 @@ public class Main {
         if (priorityNum == 0) {
             return;
         }
-        String priority = getPriorityFromChoice(priorityNum);
+        Priority priority = getPriorityFromChoice(priorityNum);
         manager.setTaskPriority(taskNum, priority);
         displaySuccess("Priority updated.");
     }
@@ -255,7 +255,7 @@ public class Main {
         if (categoryNum == 0) {
             return;
         }
-        String category = getCategoryFromChoice(categoryNum);
+        Category category = getCategoryFromChoice(categoryNum);
         manager.setTaskCategory(taskNum, category);
         displaySuccess("Category updated.");
     }
@@ -412,36 +412,25 @@ public class Main {
     // Choice Conversion Helpers
     // =========================================================
 
-    private String getPriorityFromChoice(int choice) {
-        switch (choice) {
-            case 1:
-                return "High";
-            case 2:
-                return "Medium";
-            case 3:
-                return "Low";
-            default:
-                return null;
-        }
+    private Priority getPriorityFromChoice(int choice) {
+        return switch (choice) {
+            case 1 -> Priority.HIGH;
+            case 2 -> Priority.MEDIUM;
+            case 3 -> Priority.LOW;
+            default -> null;
+        };
     }
 
-    private String getCategoryFromChoice(int choice) {
-        switch (choice) {
-            case 1:
-                return "School";
-            case 2:
-                return "Work";
-            case 3:
-                return "Personal";
-            case 4:
-                return "Fitness";
-            case 5:
-                return "Church";
-            case 6:
-                return "Other";
-            default:
-                return null;
-        }
+    private Category getCategoryFromChoice(int choice) {
+        return switch (choice) {
+            case 1 -> Category.SCHOOL;
+            case 2 -> Category.WORK;
+            case 3 -> Category.PERSONAL;
+            case 4 -> Category.FITNESS;
+            case 5 -> Category.CHURCH;
+            case 6 -> Category.OTHER;
+            default -> null;
+        };
     }
 
     private boolean getCompletionFromChoice(int choice) {

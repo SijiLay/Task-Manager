@@ -2,16 +2,16 @@ public class Task {
     private String name;
     private boolean completed;
     private Priority priority;
-    private String category;
+    private Category category;
 
-    public Task(String name,Priority priority){
+    public Task(String name){
         this.name=name;
         this.completed=false;
-        this.priority=priority;
-        this.category="Other";
+        this.priority=Priority.MEDIUM;
+        this.category=Category.OTHER;
     }
 
-     public Task(String name,boolean completed,Priority priority,String category){
+     public Task(String name,boolean completed,Priority priority,Category category){
         this.name=name;
         this.completed=completed;
         this.priority=priority;
@@ -47,11 +47,11 @@ public class Task {
         this.priority = priority;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 

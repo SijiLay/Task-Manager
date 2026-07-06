@@ -1,5 +1,5 @@
 # Task Manager
-Testing git setup
+
 ## Overview
 
 Task Manager is a Java console application that allows users to create, organize, update, search, filter, sort, and save tasks. The project was built across multiple versions, with each version focusing on improving a specific part of the program.

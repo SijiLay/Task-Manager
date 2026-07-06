@@ -50,11 +50,11 @@ public class TaskManager {
         return tasks;
     }
 
-    public void setTaskPriority(int taskNumber, String priority){
+    public void setTaskPriority(int taskNumber, Priority priority){
         getTaskByNumber(taskNumber).setPriority(priority);
     }
 
-    public void setTaskCategory(int taskNumber, String category){
+    public void setTaskCategory(int taskNumber, Category category){
         getTaskByNumber(taskNumber).setCategory(category);
     }
 
@@ -69,20 +69,20 @@ public class TaskManager {
         return searchList;
     }
 
-    public ArrayList<Task> filterByPriority(String priority){
+    public ArrayList<Task> filterByPriority(Priority priority){
         ArrayList<Task> filteredList = new ArrayList<>();
         for(Task task:tasks){
-            if(task.getPriority().contentEquals(priority)){
+            if(task.getPriority()==priority){
                 filteredList.add(task);
             }
         }
         return filteredList;
     }
 
-    public ArrayList<Task> filterByCategory(String category){
+    public ArrayList<Task> filterByCategory(Category category){
         ArrayList<Task> filteredList = new ArrayList<>();
         for(Task task:tasks){
-            if(task.getCategory().contentEquals(category)){
+            if(task.getCategory() == category){
                 filteredList.add(task);
             }
         }
@@ -102,32 +102,17 @@ public class TaskManager {
     public ArrayList<Task> sortByPriority(){
         ArrayList<Task> results = new ArrayList<>(tasks);
 
-        Collections.sort(results, (task1, task2) ->
-                getPriorityValue(task1.getPriority()) - getPriorityValue(task2.getPriority()));
+        results.sort((task1, task2) ->
+                (task1.getPriority().getRank()) - (task2.getPriority().getRank()));
         return results;
     }
 
     public ArrayList<Task> sortByCompletionStatus(){
         ArrayList<Task> results = new ArrayList<>(tasks);
 
-        Collections.sort(results, (task1, task2) ->
+        results.sort((task1, task2) ->
                 getCompletionValue(task1.isCompleted()) - getCompletionValue(task2.isCompleted()));
         return results;
-    }
-
-    private int getPriorityValue(String priority){
-        if(priority.equals("High")){
-            return 1;
-        }
-        else if(priority.equals("Medium")){
-            return 2;
-        }
-        else if(priority.equals("Low")){
-            return 3;
-        }
-        else {
-            return 4;
-        }
     }
 
     private int getCompletionValue(boolean completion ){
