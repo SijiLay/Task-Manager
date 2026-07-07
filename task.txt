@@ -1,5 +1,3 @@
-Homework,false,HIGH,SCHOOL
-Shift,true,MEDIUM,WORK
-Gym,false,LOW,FITNESS
-Bible Study,true,HIGH,CHURCH
-Laundry,false,MEDIUM,OTHER
+Study,false,HIGH,SCHOOL
+Workout,true,MEDIUM,FITNESS
+Read,false,LOW,PERSONAL

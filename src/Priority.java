@@ -7,11 +7,11 @@ public enum Priority {
     }
 
     public static Priority fromString(String priority){
-        return switch (priority) {
+        return switch (priority.trim().toUpperCase()) {
             case "HIGH" -> HIGH;
             case "MEDIUM" -> MEDIUM;
             case "LOW" -> LOW;
-            default -> MEDIUM;
+            default -> throw new IllegalArgumentException("Invalid priority value: "+priority);
         };
     }
 

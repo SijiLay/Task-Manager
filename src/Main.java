@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,11 +13,30 @@ public class Main {
 
     public static void main(String[] args) {
         FileManager fileManager = new FileManager("task.txt");
-        ArrayList<Task> loadedTasks = fileManager.loadTasks();
+        ArrayList<Task> loadedTasks = null;
+        // If the file cannot be read, stop the program to avoid using invalid data.
+        try {
+            loadedTasks = fileManager.loadTasks();
+        } catch (IOException e) {
+            System.out.println("""
+               Error: Tasks could not be loaded.
+               Program will exit to protect your data.
+               """);
+            return;
+        }
         TaskManager manager = new TaskManager(loadedTasks);
         Main app = new Main(manager);
         app.run();
-        fileManager.saveTasks(manager.getTasks());
+        // Notify the user if their changes could not be saved.
+        try {
+            fileManager.saveTasks(manager.getTasks());
+        } catch (IOException e) {
+            System.out.println("""
+                    Error: Tasks could not be saved.
+                    Your latest changes may be lost.
+                    Exiting program.
+                    """);
+        }
     }
 
     // =========================================================
