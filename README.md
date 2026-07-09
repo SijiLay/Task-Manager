@@ -8,23 +8,36 @@ The goal of this project was to practice Java fundamentals, object-oriented prog
 
 ## Features
 
-* Add new tasks
-* View all tasks
-* Search tasks by name
-* Filter tasks by priority
-* Filter tasks by category
-* Filter tasks by completion status
-* Sort tasks by priority
-* Sort tasks by completion status
-* Mark tasks as complete
-* Mark tasks as incomplete
-* Rename tasks
-* Delete tasks
-* Set task priority
-* Set task category
-* Save tasks to a text file
-* Load saved tasks when the program starts
-* Validate user input to prevent common crashes
+- Add new tasks
+- View all tasks
+- Search tasks by name (case-insensitive)
+- Filter tasks by priority
+- Filter tasks by category
+- Filter tasks by completion status
+- Sort tasks by priority
+- Sort tasks by completion status
+- Mark tasks as complete
+- Mark tasks as incomplete
+- Rename tasks
+- Change task priority
+- Change task category
+- Save tasks to a text file
+- Automatically load saved tasks on startup
+- Input validation to prevent invalid user input
+- Robust file loading with corrupted task recovery
+- Warning messages for invalid task data
+- Enum-based priorities and categories
+- JUnit unit tests
+
+## Reliability Improvements
+
+Version 10 introduced stronger error handling throughout the application.
+
+- Invalid task lines are skipped instead of crashing the program.
+- Blank lines in the save file are ignored.
+- File resources are automatically closed using try-with-resources.
+- Serious file loading and saving errors are handled by the main application.
+- Invalid priorities, categories, task names, and completion values are detected during loading.
 
 ## Project Structure
 
@@ -36,9 +49,9 @@ Handles the main program loop, menu display, user input, input validation, and u
 
 Represents a single task. Each task has a name, completion status, priority, and category.
 
-### TaskManager.java
+### FileManager.java
 
-Handles the main task logic. This includes adding tasks, deleting tasks, renaming tasks, completing tasks, searching, filtering, sorting, and updating task information.
+Handles saving and loading tasks from a text file. It validates loaded task data, skips corrupted task entries without stopping the program, and reports serious file I/O errors back to the main application.
 
 ### FileManager.java
 
@@ -102,12 +115,17 @@ TaskManager/
 │   ├── Main.java
 │   ├── Task.java
 │   ├── TaskManager.java
-│   └── FileManager.java
-├── docs/
-│   └── VERSION_HISTORY.md
+│   ├── FileManager.java
+│   ├── Priority.java
+│   └── Category.java
+├── test/
+│   ├── TaskTest.java
+│   ├── TaskManagerTest.java
+│   └── FileManagerTest.java
 ├── README.md
 ├── .gitignore
 └── task.txt
+```
 ## Version History
 
 ### V1: Basic Console Task Manager
@@ -142,34 +160,47 @@ Cleaned up repeated validation logic, improved helper methods, and made the prog
 
 Focused on improving the README, documentation, GitHub presentation, and overall professionalism of the project.
 
+### V9: Stronger Data Modeling with Enums
+
+Replaced String-based priority and category values with Java enums to improve type safety, readability, and maintainability. This version introduced stronger data modeling while keeping the application's features the same.
+
+### V10: Exception Handling and Unit Testing
+
+Improved the reliability of the application by adding structured exception handling and comprehensive JUnit tests. Corrupted task data is now safely skipped during loading, file resources are managed using try-with-resources, and serious file I/O errors are handled by the main application.
+
 ## What I Learned
 
 Through this project, I practiced:
 
-* Java classes and objects
-* Object-oriented programming
-* ArrayLists
-* Loops and conditionals
-* User input with Scanner
-* Input validation
-* File reading and writing
-* Separating code responsibilities across multiple classes
-* Refactoring repeated code
-* Building a project across multiple versions
-* Writing documentation for a portfolio project
+- Object-oriented programming
+- Designing classes with clear responsibilities
+- Java enums
+- Collections using ArrayList
+- Input validation
+- File reading and writing
+- Exception handling
+- try-with-resources
+- Custom parsing and validation
+- Unit testing with JUnit 5
+- Refactoring large methods into helper methods
+- Git and GitHub workflow
+- Building software incrementally through versioned development
 
 ## Skills Practiced
 
-- Java programming
-- Object-oriented programming
-- Console-based user interaction
-- Input validation
+- Java
+- Object-Oriented Programming (OOP)
+- Enums
+- Exception Handling
+- File I/O
 - ArrayLists
-- File reading and writing
-- Searching, filtering, and sorting data
-- Refactoring repeated code into helper methods
-- Project documentation
-- Git and GitHub workflow 
+- JUnit 5
+- Input Validation
+- Refactoring
+- Separation of Responsibilities
+- Console Application Development
+- Git
+- GitHub
 
 ## Future Improvements
 

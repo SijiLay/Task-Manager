@@ -8,6 +8,7 @@ public enum Category {
             case "PERSONAL"->PERSONAL;
             case "FITNESS"->FITNESS;
             case "CHURCH"->CHURCH;
+            case "OTHER"->OTHER;
             default -> throw new IllegalArgumentException("Invalid category value: "+category);
         };
     }

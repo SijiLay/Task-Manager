@@ -1,3 +1,1 @@
-Study,false,HIGH,SCHOOL
-Workout,true,MEDIUM,FITNESS
-Read,false,LOW,PERSONAL
+Study Java,false,MEDIUM,OTHER
