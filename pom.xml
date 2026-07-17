@@ -27,6 +27,12 @@
             <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>26</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -36,7 +42,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>TaskManagerGUI</mainClass>
+                    <mainClass>TaskManagerApp</mainClass>
                 </configuration>
             </plugin>
 

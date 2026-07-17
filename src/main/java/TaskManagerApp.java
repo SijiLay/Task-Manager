@@ -1,0 +1,32 @@
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+
+import java.util.Objects;
+
+public class TaskManagerApp extends Application  {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("task-view.fxml")));
+        Parent root = loader.load();
+
+        TaskController controller = loader.getController();
+
+        Scene scene = new Scene(root, 500, 700);
+
+        stage.setTitle("Task Manager GUI");
+        stage.setScene(scene);
+
+        stage.setOnCloseRequest(event -> controller.saveTasks());
+
+        stage.show();
+    }
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
