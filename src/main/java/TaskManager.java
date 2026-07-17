@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class TaskManager {
     private ArrayList<Task> tasks;
@@ -15,6 +14,11 @@ public class TaskManager {
 
     public void addTask(String name){
         Task task =new Task(name);
+        tasks.add(task);
+    }
+
+    public void addTask(String name, Priority priority, Category category) {
+        Task task = new Task(name, false, priority, category);
         tasks.add(task);
     }
 

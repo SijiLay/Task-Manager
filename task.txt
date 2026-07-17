@@ -1,1 +1,2 @@
-Study Java,false,MEDIUM,OTHER
+Study Java,true,MEDIUM,SCHOOL
+Walk Dog,false,LOW,PERSONAL
