@@ -14,14 +14,11 @@ public class TaskManagerApp extends Application  {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("task-view.fxml")));
         Parent root = loader.load();
 
-        TaskController controller = loader.getController();
 
         Scene scene = new Scene(root, 500, 700);
 
         stage.setTitle("Task Manager GUI");
         stage.setScene(scene);
-
-        stage.setOnCloseRequest(event -> controller.saveTasks());
 
         stage.show();
     }

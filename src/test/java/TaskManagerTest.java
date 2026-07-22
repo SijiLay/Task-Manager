@@ -8,10 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaskManagerTest {
 
     TaskManager manager;
+    private DatabaseManager databaseManager;
 
     @BeforeEach
     void setUp() {
-        manager = new TaskManager();
+        databaseManager = new DatabaseManager();
+        databaseManager.initializeDatabase();
+
+        manager = new TaskManager(new ArrayList<>(), databaseManager);
     }
 
     @Test

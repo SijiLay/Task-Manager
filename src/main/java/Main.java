@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,30 +11,24 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        FileManager fileManager = new FileManager("task.txt");
-        ArrayList<Task> loadedTasks = null;
-        // If the file cannot be read, stop the program to avoid using invalid data.
+
         try {
-            loadedTasks = fileManager.loadTasks();
-        } catch (IOException e) {
+            DatabaseManager databaseManager = new DatabaseManager();
+
+            databaseManager.initializeDatabase();
+
+            ArrayList<Task> loadedTasks = databaseManager.loadTasks();
+
+            TaskManager manager = new TaskManager(loadedTasks, databaseManager);
+
+            Main app = new Main(manager);
+            app.run();
+
+        } catch (RuntimeException e) {
             System.out.println("""
-               Error: Tasks could not be loaded.
-               Program will exit to protect your data.
-               """);
-            return;
-        }
-        TaskManager manager = new TaskManager(loadedTasks);
-        Main app = new Main(manager);
-        app.run();
-        // Notify the user if their changes could not be saved.
-        try {
-            fileManager.saveTasks(manager.getTasks());
-        } catch (IOException e) {
-            System.out.println("""
-                    Error: Tasks could not be saved.
-                    Your latest changes may be lost.
-                    Exiting program.
-                    """);
+                Error: The database could not be opened.
+                The program will exit to protect your data.
+                """);
         }
     }
 
@@ -157,6 +150,9 @@ public class Main {
             return;
         } else if (filterChoice == 1) {
             int priorityChoice = getPriorityChoice();
+            if (priorityChoice == 0) {
+                return;
+            }
             Priority priority = getPriorityFromChoice(priorityChoice);
             ArrayList<Task> results = manager.filterByPriority(priority);
 
@@ -165,6 +161,9 @@ public class Main {
 
         } else if (filterChoice == 2) {
             int categoryChoice = getCategoryChoice();
+            if (categoryChoice == 0) {
+                return;
+            }
             Category category = getCategoryFromChoice(categoryChoice);
             ArrayList<Task> results = manager.filterByCategory(category);
             displayHeader("Filtered Tasks");
@@ -172,6 +171,9 @@ public class Main {
 
         } else if (filterChoice == 3) {
             int completionChoice = getCompletionChoice();
+            if (completionChoice == 0) {
+                return;
+            }
             boolean completion = getCompletionFromChoice(completionChoice);
             ArrayList<Task> results = manager.filterByCompletionStatus(completion);
 
@@ -342,14 +344,11 @@ public class Main {
 
     public String getTaskName() {
         String taskName = "";
-        while (taskName.isEmpty() || taskName.contains(",")) {
+        while (taskName.isEmpty()) {
             System.out.println("Enter task name: ");
             taskName = scanner.nextLine();
             if (taskName.isEmpty()) {
                 displayError("Cannot leave empty. Try again.");
-            }
-            if (taskName.contains(",")) {
-                displayError("Cannot contain a comma. Try again.");
             }
         }
         return taskName;

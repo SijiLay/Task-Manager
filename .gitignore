@@ -45,3 +45,6 @@ out/
 Thumbs.db
 
 test_tasks.txt
+target/
+tasks.db
+test_tasks.db

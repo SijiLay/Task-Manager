@@ -2,8 +2,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
-import java.io.IOException;
-import java.net.URL;
+ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -23,21 +22,27 @@ public class TaskController implements Initializable {
 
 
     private TaskManager taskManager;
-    private FileManager fileManager;
-
-    private boolean saveEnabled = true;
+    private DatabaseManager databaseManager;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        fileManager=new FileManager("task.txt");
         try {
-            ArrayList<Task> loadedTasks = fileManager.loadTasks();
-            taskManager=new TaskManager(loadedTasks);
-        } catch (IOException e) {
-            taskManager = new TaskManager();
-            saveEnabled = false;
-            showError("Tasks could not be loaded. Saving has been disabled to protect your data.");
+            databaseManager = new DatabaseManager();
+            databaseManager.initializeDatabase();
+
+            ArrayList<Task> loadedTasks = databaseManager.loadTasks();
+
+            taskManager = new TaskManager(loadedTasks, databaseManager);
+
+        } catch (RuntimeException e) {
+            showError("""
+                The database could not be opened.
+                The application will close to protect your data.
+                """);
+
+            javafx.application.Platform.exit();
+            return;
         }
 
         priorityBox.getItems().addAll(Priority.values());
@@ -47,13 +52,16 @@ public class TaskController implements Initializable {
 
         refreshTaskList();
 
-        taskList.getSelectionModel().selectedItemProperty().addListener((observable, oldTask, selectedTask) -> {
-            if (selectedTask != null) {
-                taskInput.setText(selectedTask.getName());
-                priorityBox.setValue(selectedTask.getPriority());
-                categoryBox.setValue(selectedTask.getCategory());
-            }
-        });
+        taskList.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldTask, selectedTask) -> {
+                    if (selectedTask != null) {
+                        taskInput.setText(selectedTask.getName());
+                        priorityBox.setValue(selectedTask.getPriority());
+                        categoryBox.setValue(selectedTask.getCategory());
+                    }
+                });
+
         taskList.setPlaceholder(new Label("No tasks found."));
     }
     private void showWarning(String message) {
@@ -95,13 +103,10 @@ public class TaskController implements Initializable {
             showWarning("Task name cannot be empty.");
             return;
         }
-        if(taskName.contains(",")){
-            showWarning("Task name cannot contain commas.");
-            return;
-        }
 
         taskManager.addTask(taskName, priority, category);
         refreshTaskList();
+        clearTaskEditor();
     }
 
     @FXML
@@ -152,10 +157,6 @@ public class TaskController implements Initializable {
         }
         if(newName.isEmpty()){
             showWarning("New task name cannot be empty");
-            return;
-        }
-        if(newName.contains(",")){
-            showWarning("Task name cannot contain commas.");
             return;
         }
 
@@ -236,17 +237,6 @@ public class TaskController implements Initializable {
         displayTasks(results);
     }
 
-    public void saveTasks() {
-        if (!saveEnabled) {
-            return;
-        }
-
-        try {
-            fileManager.saveTasks(taskManager.getTasks());
-        } catch (IOException e) {
-            showError("Tasks could not be saved. Your latest changes may be lost.");
-        }
-    }
     private void clearTaskEditor() {
         taskInput.clear();
         priorityBox.setValue(Priority.MEDIUM);

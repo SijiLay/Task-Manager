@@ -1,24 +1,25 @@
 import java.util.ArrayList;
 
 public class TaskManager {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
+    private final DatabaseManager databaseManager;
 
 
-    public TaskManager(){
-        tasks= new ArrayList<>();
-    }
-
-    public TaskManager(ArrayList<Task> tasks){
+    public TaskManager(ArrayList<Task> tasks, DatabaseManager databaseManager){
         this.tasks=tasks;
+        this.databaseManager=databaseManager;
     }
 
     public void addTask(String name){
         Task task =new Task(name);
+        databaseManager.insertTask(task);
         tasks.add(task);
     }
 
     public void addTask(String name, Priority priority, Category category) {
         Task task = new Task(name, false, priority, category);
+
+        databaseManager.insertTask(task);
         tasks.add(task);
     }
 
@@ -31,18 +32,32 @@ public class TaskManager {
     }
 
     public void completeTask(int taskNumber){
-        getTaskByNumber(taskNumber).markCompleted();
+        Task task = getTaskByNumber(taskNumber);
+
+        task.markCompleted();
+
+        databaseManager.updateTask(task);
     }
     public void markTaskIncomplete(int taskNumber){
-        getTaskByNumber(taskNumber).markIncomplete();
+        Task task = getTaskByNumber(taskNumber);
+        task.markIncomplete();
+        databaseManager.updateTask(task);
     }
 
     public void deleteTask(int taskNumber){
-        tasks.remove(getTaskByNumber(taskNumber));
+        Task task = getTaskByNumber(taskNumber);
+
+        databaseManager.deleteTask(task.getId());
+
+        tasks.remove(task);
     }
 
     public void renameTask(int taskNumber,String newName){
-        getTaskByNumber(taskNumber).changeName(newName);
+        Task task = getTaskByNumber(taskNumber);
+
+        task.changeName(newName);
+
+        databaseManager.updateTask(task);
     }
 
 
@@ -55,11 +70,15 @@ public class TaskManager {
     }
 
     public void setTaskPriority(int taskNumber, Priority priority){
-        getTaskByNumber(taskNumber).setPriority(priority);
+        Task task = getTaskByNumber(taskNumber);
+        task.setPriority(priority);
+        databaseManager.updateTask(task);
     }
 
     public void setTaskCategory(int taskNumber, Category category){
-        getTaskByNumber(taskNumber).setCategory(category);
+        Task task = getTaskByNumber(taskNumber);
+        task.setCategory(category);
+        databaseManager.updateTask(task);
     }
 
     public ArrayList<Task> searchTasks(String searchTerm){
