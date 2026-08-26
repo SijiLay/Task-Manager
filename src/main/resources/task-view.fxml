@@ -34,7 +34,6 @@
    </HBox>
    <HBox prefHeight="12.0" prefWidth="1687.0" spacing="10.0">
       <children>
-         <Button fx:id="renameTask" onAction="#renameTask" text="Rename Task" />
          <Button fx:id="updateTaskDetails" onAction="#updateTaskDetails" text="Update Details" />
       </children>
       <padding>

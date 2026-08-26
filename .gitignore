@@ -48,3 +48,4 @@ test_tasks.txt
 target/
 tasks.db
 test_tasks.db
+data/

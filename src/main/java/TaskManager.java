@@ -1,25 +1,15 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskManager {
-    private final ArrayList<Task> tasks;
-    private final DatabaseManager databaseManager;
+    private final List<Task> tasks;
 
 
-    public TaskManager(ArrayList<Task> tasks, DatabaseManager databaseManager){
+    public TaskManager(List<Task> tasks){
         this.tasks=tasks;
-        this.databaseManager=databaseManager;
     }
 
-    public void addTask(String name){
-        Task task =new Task(name);
-        databaseManager.insertTask(task);
-        tasks.add(task);
-    }
-
-    public void addTask(String name, Priority priority, Category category) {
-        Task task = new Task(name, false, priority, category);
-
-        databaseManager.insertTask(task);
+    public void addTask(Task task) {
         tasks.add(task);
     }
 
@@ -27,58 +17,20 @@ public class TaskManager {
        return !tasks.isEmpty();
     }
 
-    public Task getTaskByNumber(int taskNumber){
-        return tasks.get(taskNumber - 1);
-    }
-
-    public void completeTask(int taskNumber){
-        Task task = getTaskByNumber(taskNumber);
-
+    public void completeTask(Task task){
         task.markCompleted();
-
-        databaseManager.updateTask(task);
     }
-    public void markTaskIncomplete(int taskNumber){
-        Task task = getTaskByNumber(taskNumber);
+
+    public void markTaskIncomplete(Task task){
         task.markIncomplete();
-        databaseManager.updateTask(task);
     }
 
-    public void deleteTask(int taskNumber){
-        Task task = getTaskByNumber(taskNumber);
-
-        databaseManager.deleteTask(task.getId());
-
+    public void deleteTask(Task task) {
         tasks.remove(task);
     }
 
-    public void renameTask(int taskNumber,String newName){
-        Task task = getTaskByNumber(taskNumber);
-
-        task.changeName(newName);
-
-        databaseManager.updateTask(task);
-    }
-
-
-    public int sizeOfList(){
-        return tasks.size();
-    }
-
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return tasks;
-    }
-
-    public void setTaskPriority(int taskNumber, Priority priority){
-        Task task = getTaskByNumber(taskNumber);
-        task.setPriority(priority);
-        databaseManager.updateTask(task);
-    }
-
-    public void setTaskCategory(int taskNumber, Category category){
-        Task task = getTaskByNumber(taskNumber);
-        task.setCategory(category);
-        databaseManager.updateTask(task);
     }
 
     public ArrayList<Task> searchTasks(String searchTerm){
@@ -146,4 +98,6 @@ public class TaskManager {
             return 2;
         }
     }
+
+
 }

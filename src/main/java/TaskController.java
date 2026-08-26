@@ -2,8 +2,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
- import java.net.URL;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class TaskController implements Initializable {
@@ -22,23 +24,30 @@ public class TaskController implements Initializable {
 
 
     private TaskManager taskManager;
-    private DatabaseManager databaseManager;
+    private TaskApiClient taskApiClient;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        taskApiClient = new TaskApiClient();
+
         try {
-            databaseManager = new DatabaseManager();
-            databaseManager.initializeDatabase();
 
-            ArrayList<Task> loadedTasks = databaseManager.loadTasks();
+            List<ApiTask> apiTasks =
+                    taskApiClient.getTasks();
 
-            taskManager = new TaskManager(loadedTasks, databaseManager);
+            List<Task> loadedTasks = new ArrayList<>();
 
-        } catch (RuntimeException e) {
+            for (ApiTask apiTask : apiTasks) {
+                Task convertedTask = convertApiTask(apiTask);
+                loadedTasks.add(convertedTask);
+            }
+            taskManager = new TaskManager(loadedTasks);
+
+        } catch (IOException | InterruptedException e) {
             showError("""
-                The database could not be opened.
-                The application will close to protect your data.
+                The task API could not be reached.
+                Make sure the Spring Boot server is running.
                 """);
 
             javafx.application.Platform.exit();
@@ -47,6 +56,7 @@ public class TaskController implements Initializable {
 
         priorityBox.getItems().addAll(Priority.values());
         categoryBox.getItems().addAll(Category.values());
+
         priorityBox.setValue(Priority.MEDIUM);
         categoryBox.setValue(Category.OTHER);
 
@@ -78,7 +88,7 @@ public class TaskController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    private void displayTasks(ArrayList<Task> tasksToDisplay) {
+    private void displayTasks(List<Task> tasksToDisplay) {
         taskList.getItems().setAll(tasksToDisplay);
     }
     private void refreshTaskList() {
@@ -94,7 +104,7 @@ public class TaskController implements Initializable {
 
 
     @FXML
-    private void addTask() {
+    private void addTask()  {
         String taskName = taskInput.getText().trim();
         Priority priority = priorityBox.getValue();
         Category category = categoryBox.getValue();
@@ -104,81 +114,118 @@ public class TaskController implements Initializable {
             return;
         }
 
-        taskManager.addTask(taskName, priority, category);
+        ApiTaskRequest apiTaskRequest = new ApiTaskRequest();
+        apiTaskRequest.setName(taskName);
+        apiTaskRequest.setCategory(category.name());
+        apiTaskRequest.setPriority(priority.name());
+
+        ApiTask createdApiTask;
+        try {
+            createdApiTask = taskApiClient.addTask(apiTaskRequest);
+        } catch (IOException | InterruptedException e) {
+            showError("Could not reach the task API.");
+            return;
+        }
+        Task createdTask= convertApiTask(createdApiTask);
+
+        taskManager.addTask(createdTask);
         refreshTaskList();
         clearTaskEditor();
     }
 
     @FXML
-    private void deleteTask(){
-        int taskNumber=getSelectedTaskNumber();
+    private void deleteTask() {
 
-        if(taskNumber==-1){
-            showWarning("No task selected");
+        Task selectedTask = taskList.getSelectionModel().getSelectedItem();
+        if(selectedTask==null){
+            showWarning("No task selected.");
             return;
         }
 
-        taskManager.deleteTask(taskNumber);
+        try {
+            taskApiClient.deleteTask(selectedTask.getId());
+        } catch (IOException | InterruptedException e) {
+            showError("Could not reach the task API.");
+            return;
+        }
+        taskManager.deleteTask(selectedTask);
         refreshTaskList();
         clearTaskEditor();
         }
 
     @FXML
     private void completeTask() {
-        int taskNumber=getSelectedTaskNumber();
-        if(taskNumber==-1){
-            showWarning("No task selected");
+        Task selectedTask = taskList.getSelectionModel().getSelectedItem();
+        if(selectedTask==null){
+            showWarning("No task selected.");
             return;
         }
-
-        taskManager.completeTask(taskNumber);
+        try {
+            taskApiClient.completeTask(selectedTask.getId());
+        } catch (IOException | InterruptedException e) {
+            showError("Could not reach the task API.");
+            return;
+        }
+        taskManager.completeTask(selectedTask);
         refreshTaskList();
     }
 
     @FXML
     private void markIncomplete(){
-        int taskNumber = getSelectedTaskNumber();
-        if(taskNumber==-1){
-            showWarning("No task selected");
+        Task selectedTask = taskList.getSelectionModel().getSelectedItem();
+        if(selectedTask==null){
+            showWarning("No task selected.");
             return;
         }
-            taskManager.markTaskIncomplete(taskNumber);
-            refreshTaskList();
+        try {
+            taskApiClient.markTaskIncomplete(selectedTask.getId());
+        } catch (IOException | InterruptedException e) {
+            showError("Could not reach the task API.");
+            return;
+        }
+        taskManager.markTaskIncomplete(selectedTask);
+        refreshTaskList();
     }
 
     @FXML
-    private void renameTask(){
-        int taskNumber=getSelectedTaskNumber();
-        String newName=taskInput.getText().trim();
-
-        if(taskNumber==-1){
-            showWarning("Please select a task to rename");
-            return;
-        }
-        if(newName.isEmpty()){
-            showWarning("New task name cannot be empty");
+    private void updateTaskDetails() {
+        Task selectedTask = taskList.getSelectionModel().getSelectedItem();
+        if(selectedTask==null){
+            showWarning("No task selected.");
             return;
         }
 
-        taskManager.renameTask(taskNumber,newName);
+         String newName = taskInput.getText().trim();
+        if (newName.isEmpty()) {
+            showWarning("Task name cannot be empty.");
+            return;
+        }
+         Priority newPriority = priorityBox.getValue();
+         Category newCategory = categoryBox.getValue();
+
+         ApiTaskRequest apiTaskRequest = new ApiTaskRequest();
+         apiTaskRequest.setName(newName);
+         apiTaskRequest.setCategory(newCategory.name());
+         apiTaskRequest.setPriority(newPriority.name());
+
+
+        ApiTask updatedApiTask;
+
+        try {
+            updatedApiTask = taskApiClient.updateTask(
+                    selectedTask.getId(),
+                    apiTaskRequest
+            );
+        } catch (IOException | InterruptedException e) {
+            showError("Could not reach the task API.");
+            return;
+        }
+        selectedTask.changeName(updatedApiTask.getName());
+        selectedTask.setPriority(Priority.valueOf(updatedApiTask.getPriority()));
+        selectedTask.setCategory(Category.valueOf(updatedApiTask.getCategory()));
         refreshTaskList();
-        clearTaskEditor();
     }
 
-    @FXML
-    private void updateTaskDetails(){
-        int taskNumber=getSelectedTaskNumber();
-        Priority selectedPriority=priorityBox.getValue();
-        Category selectedCategory=categoryBox.getValue();
-
-        if(taskNumber==-1){
-            showWarning("Please select a task to update");
-            return;
-        }
-        taskManager.setTaskPriority(taskNumber,selectedPriority);
-        taskManager.setTaskCategory(taskNumber,selectedCategory);
-        refreshTaskList();
-    }
 
     @FXML
     private void searchTasks(){
@@ -242,5 +289,16 @@ public class TaskController implements Initializable {
         priorityBox.setValue(Priority.MEDIUM);
         categoryBox.setValue(Category.OTHER);
         taskList.getSelectionModel().clearSelection();
+    }
+
+    private Task convertApiTask(ApiTask apiTask) {
+        Task convertedTask = new Task(
+                apiTask.getId().intValue(),
+                apiTask.getName(),
+                apiTask.isCompleted(),
+                Priority.valueOf(apiTask.getPriority()),
+                Category.valueOf(apiTask.getCategory())
+        );
+        return convertedTask;
     }
 }
