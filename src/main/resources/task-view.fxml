@@ -8,11 +8,40 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="668.0" prefWidth="501.0" spacing="15" style="-fx-spacing: 15;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TaskController">
-   <Label prefHeight="31.0" prefWidth="233.0" text="Task Manager" />
-   <TextField fx:id="taskInput" promptText="Enter task name" />
-   <HBox prefHeight="32.0" prefWidth="1687.0" spacing="10.0">
+<VBox prefHeight="902.0" prefWidth="692.0" spacing="15" style="-fx-spacing: 15;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TaskController">
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <children>
+         <Label alignment="CENTER" prefHeight="37.0" prefWidth="711.0" text="Task Manager">
+            <font>
+               <Font name="Corbel Bold" size="42.0" />
+            </font>
+            <HBox.margin>
+               <Insets left="15.0" />
+            </HBox.margin>
+         </Label>
+      </children>
+   </HBox>
+   <TextField fx:id="taskInput" promptText="Enter task name" style="-fx-font-size: 16px;" />
+   <HBox alignment="CENTER" prefHeight="39.0" prefWidth="692.0">
+      <children>
+         <Label alignment="CENTER" prefHeight="25.0" prefWidth="150.0" text="Priority">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Label>
+         <Label alignment="CENTER" prefHeight="25.0" prefWidth="150.0" text="     Category">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Label>
+      </children>
+      <VBox.margin>
+         <Insets bottom="-10.0" />
+      </VBox.margin>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="32.0" prefWidth="1687.0" spacing="15.0">
       <children>
          <ComboBox fx:id="priorityBox" prefWidth="150.0" />
          <ComboBox fx:id="categoryBox" prefWidth="150.0" />
@@ -21,7 +50,7 @@
          <Insets left="15.0" />
       </padding>
    </HBox>
-   <HBox prefHeight="0.0" prefWidth="1687.0" spacing="10.0">
+   <HBox alignment="CENTER" prefHeight="0.0" prefWidth="1687.0" spacing="10.0">
       <children>
          <Button fx:id="addTask" onAction="#addTask" text="Add Task" />
          <Button fx:id="deleteTask" onAction="#deleteTask" text="Delete Task" />
@@ -32,7 +61,7 @@
          <Insets left="15.0" />
       </padding>
    </HBox>
-   <HBox prefHeight="12.0" prefWidth="1687.0" spacing="10.0">
+   <HBox alignment="CENTER" prefHeight="12.0" prefWidth="1687.0" spacing="10.0">
       <children>
          <Button fx:id="updateTaskDetails" onAction="#updateTaskDetails" text="Update Details" />
       </children>
@@ -40,7 +69,19 @@
          <Insets left="15.0" />
       </padding>
    </HBox>
-   <HBox prefHeight="27.0" prefWidth="1687.0" spacing="10.0">
+   <HBox alignment="CENTER" prefHeight="39.0" prefWidth="692.0">
+      <children>
+         <Label alignment="CENTER" prefHeight="25.0" prefWidth="150.0" text="Search Task">
+            <font>
+               <Font size="25.0" />
+            </font>
+            <HBox.margin>
+               <Insets bottom="-10.0" left="5.0" />
+            </HBox.margin>
+         </Label>
+      </children>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="27.0" prefWidth="1687.0" spacing="10.0">
       <children>
          <TextField fx:id="searchInput" promptText="Search Task" />
          <Button fx:id="searchTasks" onAction="#searchTasks" text="Search Task" />
@@ -50,7 +91,19 @@
          <Insets left="15.0" />
       </padding>
    </HBox>
-   <HBox prefHeight="0.0" prefWidth="1687.0" spacing="10.0">
+   <HBox alignment="CENTER" prefHeight="39.0" prefWidth="692.0">
+      <children>
+         <Label alignment="CENTER" prefHeight="25.0" prefWidth="150.0" text="Filter Task">
+            <font>
+               <Font size="25.0" />
+            </font>
+            <HBox.margin>
+               <Insets bottom="-10.0" left="5.0" />
+            </HBox.margin>
+         </Label>
+      </children>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="0.0" prefWidth="1687.0" spacing="10.0">
       <children>
          <Button fx:id="filterByPriority" onAction="#filterByPriority" text="Filter by Priority" />
          <Button fx:id="filterByCategory" onAction="#filterByCategory" text="Filter by Category" />
@@ -61,7 +114,19 @@
          <Insets left="15.0" />
       </padding>
    </HBox>
-   <HBox prefHeight="0.0" prefWidth="1687.0" spacing="10.0">
+   <HBox alignment="CENTER" prefHeight="39.0" prefWidth="692.0">
+      <children>
+         <Label alignment="CENTER" prefHeight="25.0" prefWidth="150.0" text="Sort Task">
+            <font>
+               <Font size="25.0" />
+            </font>
+            <HBox.margin>
+               <Insets bottom="-10.0" left="30.0" />
+            </HBox.margin>
+         </Label>
+      </children>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="0.0" prefWidth="1687.0" spacing="10.0">
       <children>
          <Button fx:id="sortByPriority" onAction="#sortByPriority" text="Sort by Priority" />
          <Button fx:id="sortByCompletion" onAction="#sortByCompletion" text="Sort by Completion" />
@@ -70,7 +135,19 @@
          <Insets left="15.0" />
       </padding>
    </HBox>
-   <ListView fx:id="taskList" prefHeight="319.0" prefWidth="501.0" />
+   <HBox alignment="CENTER" prefHeight="39.0" prefWidth="692.0">
+      <children>
+         <Label alignment="CENTER" prefHeight="25.0" prefWidth="150.0" text="Task List">
+            <font>
+               <Font size="25.0" />
+            </font>
+            <HBox.margin>
+               <Insets bottom="-10.0" />
+            </HBox.margin>
+         </Label>
+      </children>
+   </HBox>
+   <ListView fx:id="taskList" prefHeight="374.0" prefWidth="715.0" style="-fx-font-size: 16px;;" />
    <padding>
       <Insets top="15.0" />
    </padding>

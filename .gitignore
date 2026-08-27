@@ -49,3 +49,5 @@ target/
 tasks.db
 test_tasks.db
 data/
+release-files/
+installer/

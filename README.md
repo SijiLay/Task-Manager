@@ -1,218 +1,629 @@
 # Task Manager
 
-## Overview
+A Java-based task management application built with a JavaFX desktop client and a Spring Boot REST API.
 
-Task Manager is a Java console application that allows users to create, organize, update, search, filter, sort, and save tasks. The project was built across multiple versions, with each version focusing on improving a specific part of the program.
+The project began as a simple console application and evolved through multiple versions into a client-server application with a graphical interface, RESTful backend, persistent database storage, validation, exception handling, and automated testing.
 
-The goal of this project was to practice Java fundamentals, object-oriented programming, input validation, file handling, and clean program structure. By Version 8, the focus shifted from adding major new features to making the project easier to understand, more professional, and ready to show on GitHub.
+The project was developed as a long-term learning project focused on progressively applying software engineering concepts to a real application.
+
+![Task Manager Desktop Application](assets/task-manager-desktop.png)
+
+---
+
+## Technical Highlights
+
+- Built a JavaFX desktop application for managing tasks through a graphical user interface
+- Developed a Spring Boot REST API to handle task creation, retrieval, updates, and deletion
+- Implemented a layered backend architecture using Controller, Service, and Repository layers
+- Used Spring Data JPA for database persistence
+- Connected the JavaFX client to the backend using Java's `HttpClient`
+- Implemented JSON serialization and deserialization for client-server communication
+- Added input validation and centralized API exception handling
+- Implemented searching, filtering, sorting, and task status management
+- Used enums to provide type-safe priority and category values
+- Wrote JUnit tests for core application behavior
+- Managed the project with Maven, Git, and GitHub
+
+---
+
+## Technologies
+
+- Java 21
+- JavaFX
+- Spring Boot
+- Spring MVC
+- Spring Data JPA
+- H2 Database
+- JDBC
+- REST APIs
+- HTTP
+- JSON
+- Jackson
+- JUnit 5
+- Maven
+- Git
+- GitHub
+- IntelliJ IDEA
+- Scene Builder
+
+---
 
 ## Features
 
-- Add new tasks
-- View all tasks
-- Search tasks by name (case-insensitive)
-- Filter tasks by priority
-- Filter tasks by category
-- Filter tasks by completion status
-- Sort tasks by priority
-- Sort tasks by completion status
+### Desktop Application
+
+The JavaFX desktop client provides a graphical interface for managing tasks.
+
+Users can:
+
+- Add tasks
+- Delete tasks
+- Rename tasks
 - Mark tasks as complete
 - Mark tasks as incomplete
-- Rename tasks
-- Change task priority
-- Change task category
-- Save tasks to a text file
-- Automatically load saved tasks on startup
-- Input validation to prevent invalid user input
-- Robust file loading with corrupted task recovery
-- Warning messages for invalid task data
-- Enum-based priorities and categories
-- JUnit unit tests
+- Update task priority
+- Update task category
+- Search tasks by name
+- Filter tasks by priority
+- Filter tasks by category
+- Filter completed tasks
+- Filter incomplete tasks
+- Sort tasks by priority
+- Sort tasks by completion status
+- Restore the full task list after searching or filtering
 
-## Reliability Improvements
+Each task contains:
 
-Version 10 introduced stronger error handling throughout the application.
+- Name
+- Completion status
+- Priority
+- Category
 
-- Invalid task lines are skipped instead of crashing the program.
-- Blank lines in the save file are ignored.
-- File resources are automatically closed using try-with-resources.
-- Serious file loading and saving errors are handled by the main application.
-- Invalid priorities, categories, task names, and completion values are detected during loading.
+### Priority Levels
 
-## Project Structure
+- HIGH
+- MEDIUM
+- LOW
 
-### Main.java
+### Categories
 
-Handles the main program loop, menu display, user input, input validation, and user interaction. This class controls how the user moves through the program.
+- WORK
+- SCHOOL
+- PERSONAL
+- FITNESS
+- FINANCE
+- OTHER
 
-### Task.java
+---
 
-Represents a single task. Each task has a name, completion status, priority, and category.
+## REST API
 
-### FileManager.java
+The Spring Boot backend exposes REST endpoints that allow clients to interact with task data through HTTP.
 
-Handles saving and loading tasks from a text file. It validates loaded task data, skips corrupted task entries without stopping the program, and reports serious file I/O errors back to the main application.
+The API supports:
 
-### FileManager.java
+- Creating tasks
+- Retrieving all tasks
+- Retrieving individual tasks
+- Updating tasks
+- Deleting tasks
+- Completing tasks
+- Marking tasks incomplete
+- Filtering tasks by priority
+- Filtering tasks by category
+- Filtering tasks by completion status
 
-Handles saving and loading tasks from a text file so that task data can persist after the program closes.
+---
 
-## How to Run
+## Architecture
 
-1. Make sure Java is installed on your computer.
-2. Download or clone this repository.
-3. Open the project in an IDE such as IntelliJ IDEA, Eclipse, or VS Code.
-4. Run `Main.java`.
-5. Use the console menu to manage your tasks.
-## Demo
-
-When the program starts, the user is shown the main task menu:
-
-```text
-=========================================
-              TASK MANAGER
-=========================================
-Created by Olamayowa Siji Layeni
-
-A simple console task manager.
-=========================================
-
-============================
-         TASK MENU
-============================
-1. Add Task           2. View Tasks
-3. Search Task        4. Filter Task
-5. Sort Task          6. Complete Task
-7. Delete Task        8. Change Task Name
-9. Mark Incomplete   10. Set Priority
-11. Set Category     12. Exit Program
-============================
-```
-
-Example task display:
+The project uses a client-server architecture.
 
 ```text
-1. Finish README [ ] (High) [School]
-2. Review Java code [ ] (Medium) [Personal]
-3. Push project to GitHub [X] (Low) [Other]
+JavaFX Desktop Client
+        |
+        | HTTP / JSON
+        v
+Spring Boot REST API
+        |
+        v
+TaskController
+        |
+        v
+TaskService
+        |
+        v
+TaskRepository
+        |
+        v
+Spring Data JPA
+        |
+        v
+H2 Database
 ```
-## Example Menu
+
+### JavaFX Client
+
+The JavaFX application handles user interaction and presentation.
+
+`TaskController` manages the interface and responds to user actions.
+
+`TaskManager` contains client-side operations such as searching, filtering, and sorting.
+
+`TaskApiClient` communicates with the Spring Boot API using Java's `HttpClient`.
+
+API responses are converted into desktop task objects before being displayed in the interface.
+
+### Spring Boot Backend
+
+The backend follows a layered architecture.
+
+**TaskController**
+
+Handles incoming HTTP requests and maps REST endpoints to application operations.
+
+**TaskService**
+
+Contains business logic and coordinates operations between the controller and repository.
+
+**TaskRepository**
+
+Extends Spring Data JPA's `JpaRepository` and handles database access.
+
+**Task**
+
+Represents the persistent task entity stored in the database.
+
+**TaskRequest**
+
+Acts as a request DTO for validating incoming task data.
+
+**GlobalExceptionHandler**
+
+Provides centralized handling for validation errors and other invalid requests.
+
+---
+
+## API Endpoints
+
+### Retrieve Tasks
+
+```http
+GET /tasks
+```
+
+Returns all tasks.
+
+```http
+GET /tasks/{id}
+```
+
+Returns a specific task by ID.
+
+---
+
+### Create Task
+
+```http
+POST /tasks
+```
+
+Example request:
+
+```json
+{
+  "name": "Review REST API documentation",
+  "priority": "HIGH",
+  "category": "SCHOOL"
+}
+```
+
+---
+
+### Update Task
+
+```http
+PUT /tasks/{id}
+```
+
+Example request:
+
+```json
+{
+  "name": "Finish project documentation",
+  "priority": "MEDIUM",
+  "category": "SCHOOL"
+}
+```
+
+---
+
+### Delete Task
+
+```http
+DELETE /tasks/{id}
+```
+
+Deletes the task with the specified ID.
+
+---
+
+### Complete Task
+
+```http
+PUT /tasks/{id}/complete
+```
+
+Marks the selected task as completed.
+
+---
+
+### Mark Task Incomplete
+
+```http
+PUT /tasks/{id}/incomplete
+```
+
+Marks the selected task as incomplete.
+
+---
+
+### Filter by Priority
+
+```http
+GET /tasks/filter/priority?priority=HIGH
+```
+
+Returns tasks matching the specified priority.
+
+---
+
+### Filter by Category
+
+```http
+GET /tasks/filter/category?category=SCHOOL
+```
+
+Returns tasks matching the specified category.
+
+---
+
+### Filter by Completion Status
+
+```http
+GET /tasks/filter/completed?completed=true
+```
+
+Returns tasks matching the requested completion status.
+
+---
+
+## HTTP Status Codes
+
+The API uses standard HTTP status codes to communicate request results.
+
+| Status | Meaning |
+|---|---|
+| `200 OK` | Request completed successfully |
+| `201 Created` | Task created successfully |
+| `204 No Content` | Task deleted successfully |
+| `400 Bad Request` | Invalid request data |
+| `404 Not Found` | Requested task does not exist |
+
+---
+
+## Validation and Error Handling
+
+The application includes validation on both the client and server sides.
+
+The Spring Boot API validates incoming task requests before allowing them to reach the service layer.
+
+Examples of invalid input include:
+
+- Empty task names
+- Invalid priority values
+- Invalid category values
+- Requests for tasks that do not exist
+
+Validation failures are handled through a centralized exception handler.
+
+The JavaFX client also catches API and connection errors so that backend failures do not crash the desktop application.
+
+---
+
+## Running the Project
+
+### Requirements
+
+Before running the project, install:
+
+- Java 21 or newer
+- Maven
+- Git
+
+An IDE such as IntelliJ IDEA is recommended.
+
+---
+
+### Clone the Repository
+
+```bash
+git clone <repository-url>
+```
+
+Navigate into the project:
+
+```bash
+cd TaskManager
+```
+
+---
+
+### Run the Spring Boot API
+
+The backend is located inside:
 
 ```text
-TASK MENU
-1. Add Task           2. View Tasks
-3. Search Task        4. Filter Task
-5. Sort Task          6. Complete Task
-7. Delete Task        8. Change Task Name
-9. Mark Incomplete   10. Set Priority
-11. Set Category     12. Exit Program
+taskmanager-api/
 ```
+
+Navigate into the API project:
+
+```bash
+cd taskmanager-api
+```
+
+Run the Spring Boot application:
+
+```bash
+mvn spring-boot:run
+```
+
+The API runs locally on:
+
+```text
+http://localhost:8080
+```
+
+The backend must be running before the JavaFX client can communicate with it.
+
+---
+
+### Run the JavaFX Desktop Client
+
+Make sure the Spring Boot API is running first.
+
+From the root Task Manager project, run:
+
+```bash
+mvn javafx:run
+
+```text
+TaskManagerApp
+```
+
+The JavaFX application will launch and communicate with the Spring Boot API running on port `8080`.
+
+---
+
+## Testing
+
+The project uses JUnit 5 for automated testing.
+
+Tests have been written throughout the project's development to verify core application behavior, including:
+
+- Task creation
+- Task completion
+- Task deletion
+- Task editing
+- Searching
+- Filtering
+- Sorting
+- File persistence from earlier versions
+- Core task management behavior
+
+Tests can be run through IntelliJ IDEA or Maven.
+
+```bash
+mvn test
+```
+
+---
+
+## Project Evolution
+
+Task Manager was developed incrementally, with each version introducing a new software engineering concept or architectural improvement.
+
+### V1 – Basic Task Manager
+
+Created the original console application with basic task creation, viewing, completion, and deletion.
+
+### V2 – Input Validation
+
+Added stronger input validation and prevented invalid user input from crashing the application.
+
+### V3 – File Persistence
+
+Introduced file-based task saving and loading.
+
+### V4 – Task Editing
+
+Added the ability to edit existing tasks.
+
+### V5 – Priority and Category
+
+Expanded the task model with priorities and categories.
+
+### V6 – Search, Filter, and Sort
+
+Added tools for finding and organizing tasks.
+
+### V7 – Refactoring
+
+Improved navigation, reduced duplicated validation logic, and cleaned up class responsibilities.
+
+### V8 – Documentation
+
+Improved project documentation and GitHub presentation.
+
+### V9 – Enums
+
+Replaced String-based priority and category values with Java enums for stronger type safety.
+
+### V10 – Exception Handling
+
+Improved file handling, validation, and recovery from corrupted task data.
+
+### V11 – Unit Testing
+
+Expanded automated testing using JUnit 5.
+
+### V12 – JavaFX
+
+Converted the application from a console-only interface into a graphical desktop application.
+
+### V13 – Database Persistence
+
+Replaced file-based persistence with database storage and introduced database-backed task IDs.
+
+### V14 – Spring Boot REST API
+
+Introduced a Spring Boot backend and transformed the application into a client-server architecture.
+
+The JavaFX application now communicates with the backend through HTTP and JSON instead of directly managing persistence.
+
+### V15 – Finalization and Portfolio Polish
+
+Focused on final code cleanup, JavaFX presentation improvements, documentation, repository organization, packaging, and preparing the project for portfolio use.
+
+---
+
+## What I Learned
+
+Building Task Manager provided hands-on experience with:
+
+- Object-Oriented Programming
+- Java application architecture
+- JavaFX desktop development
+- REST API development
+- Spring Boot
+- Spring MVC
+- Spring Data JPA
+- Client-server architecture
+- HTTP methods and status codes
+- JSON serialization and deserialization
+- Database persistence
+- CRUD operations
+- DTOs
+- Input validation
+- Exception handling
+- Java enums
+- Collections
+- Searching, filtering, and sorting
+- JUnit testing
+- Maven dependency management
+- Git and GitHub
+- Incremental software development
+- Refactoring and separation of responsibilities
+
+One of the main goals of the project was to continually rebuild and improve the same application as new programming concepts were learned. This allowed each new technology to be applied to an existing codebase rather than being practiced only through isolated examples.
+
+---
+
 ## Repository Structure
 
 ```text
 TaskManager/
+│
+├── assets/
+│   └── task-manager-desktop.png
+│
 ├── src/
-│   ├── Main.java
-│   ├── Task.java
-│   ├── TaskManager.java
-│   ├── FileManager.java
-│   ├── Priority.java
-│   └── Category.java
-├── test/
-│   ├── TaskTest.java
-│   ├── TaskManagerTest.java
-│   └── FileManagerTest.java
+│   ├── main/
+│   │   ├── java/
+│   │   └── resources/
+│   └── test/
+│
+├── taskmanager-api/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   └── resources/
+│   │   └── test/
+│   └── pom.xml
+│
+├── docs/
+├── pom.xml
 ├── README.md
-├── .gitignore
-└── task.txt
+└── .gitignore
 ```
-## Version History
 
-### V1: Basic Console Task Manager
+---
 
-Created the first version of the task manager with basic task actions such as adding, viewing, completing, deleting, and exiting the program.
+## Releases
 
-### V2: Input Validation and Error Handling
+Task Manager V15 is available as a packaged Windows desktop application with a separate Spring Boot REST API.
 
-Improved the program so invalid input would not crash the application. Added stronger validation for menu choices and task numbers.
+### Release Files
 
-### V3: Code Organization
+The release includes:
 
-Improved the structure of the project by separating responsibilities across different classes.
+- **Task Manager Windows Installer (`.exe`)** — Installs the JavaFX desktop application and its required Java runtime components.
+- **Task Manager API (`.jar`)** — Runs the Spring Boot REST API and handles task persistence through the H2 database.
 
-### V4: File Saving and Loading
+### Running the Release
 
-Added file handling so tasks could be saved and loaded between program runs.
+#### 1. Start the API
 
-### V5: Task Editing
+Make sure Java 21 or newer is installed.
 
-Expanded task management by allowing users to rename tasks and update task status.
+Open a terminal in the folder containing the API JAR and run:
 
-### V6: Priority and Category Organization
+```bash
+java -jar taskmanager-api-0.0.1-SNAPSHOT.jar
+```
 
-Added priority and category fields to tasks so users could organize their task list more effectively.
+Wait for the Spring Boot API to finish starting. The API runs locally on:
 
-### V7: Refactoring and Navigation Improvements
+```text
+http://localhost:8080
+```
 
-Cleaned up repeated validation logic, improved helper methods, and made the program easier to navigate.
+Keep the API running while using the desktop application.
 
-### V8: Portfolio Documentation and GitHub Professionalization
+#### 2. Install the Desktop Application
 
-Focused on improving the README, documentation, GitHub presentation, and overall professionalism of the project.
+Run:
 
-### V9: Stronger Data Modeling with Enums
+```text
+Task Manager-15.0.0.exe
+```
 
-Replaced String-based priority and category values with Java enums to improve type safety, readability, and maintainability. This version introduced stronger data modeling while keeping the application's features the same.
+Complete the Windows installation process.
 
-### V10: Exception Handling and Unit Testing
+After installation, launch **Task Manager** from the desktop shortcut or Windows Start Menu.
 
-Improved the reliability of the application by adding structured exception handling and comprehensive JUnit tests. Corrupted task data is now safely skipped during loading, file resources are managed using try-with-resources, and serious file I/O errors are handled by the main application.
+The desktop application will connect to the Spring Boot API running on port `8080`.
 
-## What I Learned
+### Data Storage
 
-Through this project, I practiced:
+Task data is stored locally using an H2 file-based database.
 
-- Object-oriented programming
-- Designing classes with clear responsibilities
-- Java enums
-- Collections using ArrayList
-- Input validation
-- File reading and writing
-- Exception handling
-- try-with-resources
-- Custom parsing and validation
-- Unit testing with JUnit 5
-- Refactoring large methods into helper methods
-- Git and GitHub workflow
-- Building software incrementally through versioned development
+The database is created automatically when the API runs and persists between application restarts.
 
-## Skills Practiced
+Because the database is stored locally, task data is specific to the computer running the API and is not synchronized between devices.
 
-- Java
-- Object-Oriented Programming (OOP)
-- Enums
-- Exception Handling
-- File I/O
-- ArrayLists
-- JUnit 5
-- Input Validation
-- Refactoring
-- Separation of Responsibilities
-- Console Application Development
-- Git
-- GitHub
+### Important
 
-## Future Improvements
+The Spring Boot API must be running before using the desktop application. If the API is unavailable, the JavaFX client will not be able to retrieve or modify task data.
 
-Possible future improvements include:
+Only one instance of the API should access the same local H2 database at a time.
 
-* Adding due dates for tasks
-* Adding a graphical user interface
-* Using a database instead of a text file
-* Adding user accounts
-* Improving search and sorting options
-* Adding task editing for multiple fields at once
+---
 
 ## Author
 
-Created by Olamayowa Siji Layeni.
+**Olamayowa Siji Layeni**
+
+Computer Science  
+Virginia Commonwealth University

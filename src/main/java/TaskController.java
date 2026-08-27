@@ -224,6 +224,7 @@ public class TaskController implements Initializable {
         selectedTask.setPriority(Priority.valueOf(updatedApiTask.getPriority()));
         selectedTask.setCategory(Category.valueOf(updatedApiTask.getCategory()));
         refreshTaskList();
+        clearTaskEditor();
     }
 
 
